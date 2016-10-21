@@ -1,0 +1,32 @@
+.movie-grid-wrapper {
+     width: 100%;
+     display: flex;
+     flex-flow: row wrap;
+     
+}
+
+.movie {
+     flex: 1 1 15%;
+     margin-right: 30px;
+     margin-bottom: 30px;
+}
+
+.movie:nth-child(5n+1) {
+     margin-left: 30px;
+}
+
+.movie:nth-child(-n+5) {
+     margin-top: 30px;
+}
+
+.movie:hover {
+     cursor: pointer;
+}
+
+.movie .title {
+     color: black;
+}
+
+img {
+     width: 100%;
+}
