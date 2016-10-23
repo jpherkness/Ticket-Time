@@ -13,7 +13,13 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/movie`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
-    }
+  }
+    
+  loadMovie(id:number): Observable<Object[]> {
+    return this.http.get(`${this.baseUrl}/movie/${id}`)
+      .map(res => this.extractData(res))
+      .catch(err => this.handleError(err))
+  }
      
   private extractData(res: Response) {
     let body = res.json();

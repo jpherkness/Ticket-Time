@@ -1,13 +1,13 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 import { Home }  from './home.component';
-import { FrameworkModule }  from '../../framework/framework.module';
 
 @NgModule({
   'imports': [ 
      BrowserModule,
-     FrameworkModule
+     RouterModule
   ],
   'declarations': [ 
      Home

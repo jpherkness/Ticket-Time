@@ -1,0 +1,23 @@
+.movie-detail-wrapper {
+  display: flex;
+  flex-flow: row n;
+  
+  margin: 30px;
+}
+
+.movie-image-wrapper {
+  flex: 0 0 auto;
+}
+
+.movie-image-wrapper .movie-image {
+  margin-right: 30px;
+  width: 200px;
+}
+
+.movie-info-wrapper {
+  flex: 0 0 33.3%;
+}
+
+.movie-tag-wrapper {
+  flex: 0 0 33.3%;
+}

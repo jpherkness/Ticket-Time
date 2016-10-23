@@ -1,8 +1,7 @@
 .movie-grid-wrapper {
-     width: 100%;
+     /*width: 100%;*/
      display: flex;
      flex-flow: row wrap;
-     
 }
 
 .movie {
@@ -29,4 +28,6 @@
 
 img {
      width: 100%;
+     overflow: hidden;
+     border-radius: 2px;
 }

@@ -8,8 +8,9 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { ROUTES } from './app.routes';
 
-import { HomeModule } from './pages/home/home.module';
-import { LoginModule } from './pages/login/login.module';
+import { HomeModule } from './home/home.module';
+import { MovieListModule } from './movie-list/movie-list.module';
+import { MovieDetailModule } from './movie-detail/movie-detail.module';
 
 
 @NgModule({
@@ -18,8 +19,9 @@ import { LoginModule } from './pages/login/login.module';
     RouterModule.forRoot(ROUTES, { useHash: true }),
     FormsModule,
     HomeModule,
-    LoginModule,
-    HttpModule
+    HttpModule,
+    MovieListModule,
+    MovieDetailModule
   ],
   declarations: [
     AppComponent

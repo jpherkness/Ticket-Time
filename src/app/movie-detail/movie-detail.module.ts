@@ -1,17 +1,17 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { MovieGridComponent }  from './movie-grid.component';
+import { MovieDetail }  from './movie-detail.component';
 
 @NgModule({
   'imports': [ 
      BrowserModule
   ],
   'declarations': [ 
-     MovieGridComponent
+     MovieDetail
   ],
   'exports': [ 
-     MovieGridComponent
+     MovieDetail
   ]
 })
-export class MovieGridModule { }
+export class MovieDetailModule { }
