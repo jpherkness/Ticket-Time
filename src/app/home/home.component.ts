@@ -19,7 +19,7 @@ import { Router, RouterOutlet } from "@angular/router";
       </div>
     </div>
     `,
-    styleUrls: ['home.styles.css'],
+    styleUrls: ['home.styles.css']
 })
 export class Home {
     

@@ -5,7 +5,7 @@ import { Injectable, Inject } from '@angular/core';
 @Injectable()
 export class ApiService {
      
-  baseUrl = 'https://ticket-time-jpherkness.c9users.io/api';
+  baseUrl: string = 'https://ticket-time-jpherkness.c9users.io/api';
   
   constructor (private http: Http){ } 
      
