@@ -1,34 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Http, Response } from '@angular/http';
 
 @Injectable()
 export class AuthService {
   
-  authUserId: number;
+  private baseUrl: string = 'https://ticket-time-jpherkness.c9users.io/api';
   
-  baseUrl: string = 'https://ticket-time-jpherkness.c9users.io/api';
   constructor(private router: Router,
-              private http: Http){
-    this.authUserId = +localStorage.getItem('auth_user_id');
-  }
+              private http: Http){}
   
-  login(email: string, password: string) {
-    
-    let body = JSON.stringify({'email': email, 'password': password});
-    var headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    this.http.post(`${this.baseUrl}/auth`, body, {
-      headers: headers
-    })
+  // TODO: Refactor this.
+  public login(email: string, password: string) {
+    this.http.get(`${this.baseUrl}/auth/?email=${email}&password=${password}`)
       .subscribe(
         res => {
-          console.log(this.extractData(res));
-          var user = this.extractData(res)[0];
-          localStorage.setItem('auth_user_id', user.user_id);
-          this.authUserId = user.user_id;
-          this.router.navigate(['/home']);
+          var user = this.extractData(res);
+          if (user.user_id) {
+            localStorage.setItem('auth_user_id', user.user_id);
+            this.router.navigate(['/home']);
+          } else {
+            this.router.navigate(['/login']);
+          }
         },
         err => {
           console.log('Auth error')
@@ -36,21 +30,38 @@ export class AuthService {
       );
   }
      
-  logout() {
+  public logout() {
     localStorage.removeItem('auth_user_id');
-    //this.router.navigate(['/login']);
+  }
+  
+  public isLoggedIn() {
+    return localStorage.getItem('auth_user_id') != null;
+  }
+  
+  public getCurrentUser(): Observable<Object> {
+    if (this.isLoggedIn()) {
+      let id = this.getCurrentUserId();
+      return this.http.get(`${this.baseUrl}/user/${id}`)
+      .map(res => this.extractData(res))
+      .catch(err => this.handleError(err)) 
+    }
+    return Observable.empty();
+  }
+  
+  private getCurrentUserId(): string {
+    if (this.isLoggedIn()) {
+      let id = localStorage.getItem('auth_user_id');
+      return id;
+    }
+    return null;
   }
   
   private extractData(res: Response) {
     let body = res.json();
     return body || { };
   }
-}
-
-export class MockUser {
-  user_id = 10000;
-  first_name = "Test";
-  last_name = "subject";
-  password = "password";
-  email = "testsubject@tickettime.io";
+  
+  private handleError(err: any) {
+    return Observable.throw(err);
+  }
 }

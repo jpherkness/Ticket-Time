@@ -9,6 +9,6 @@ export class AuthGuard implements CanActivate {
   
   canActivate() {
     console.log('AuthGuard canActivate called');
-    return this.authService.authUserId < 1; // TODO: Implement a better auth guard
+    return !this.authService.isLoggedIn(); // TODO: Implement a better auth guard
   }
 }

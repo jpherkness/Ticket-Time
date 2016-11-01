@@ -24,13 +24,9 @@ export class MovieList {
                  private route: ActivatedRoute,
                 private router: Router){ }
     
-    getMovies() {
-        this.apiService.loadMovies()
-        .subscribe( movies => this.movies = movies);
-    }
-    
     ngOnInit() {
-        this.getMovies()
+        this.apiService.getMovies()
+        .subscribe( movies => this.movies = movies);
     }
     
     onClick(event) {

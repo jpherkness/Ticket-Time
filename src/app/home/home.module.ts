@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 
 import { Home }  from './home.component';
 
+import { AuthService } from '../services/auth.service';
+
 @NgModule({
   'imports': [ 
      BrowserModule,
@@ -14,6 +16,9 @@ import { Home }  from './home.component';
   ],
   'exports': [ 
      Home
+  ],
+  'providers': [ 
+    AuthService
   ]
 })
 export class HomeModule { }

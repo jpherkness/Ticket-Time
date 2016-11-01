@@ -9,14 +9,20 @@ export class ApiService {
   
   constructor (private http: Http){ } 
      
-  loadMovies(): Observable<Object[]> {
+  getMovies(): Observable<Object[]> {
     return this.http.get(`${this.baseUrl}/movie`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
   }
     
-  loadMovie(id:number): Observable<Object[]> {
+  getMovie(id:number): Observable<Object[]> {
     return this.http.get(`${this.baseUrl}/movie/${id}`)
+      .map(res => this.extractData(res))
+      .catch(err => this.handleError(err))
+  }
+  
+  getShowtimes(movieId: number, startTime: string, endTime: string): Observable<Object[]> {
+    return this.http.get(`${this.baseUrl}/showtimes/?movie_id=${movieId}&start_time=${startTime}&end_time=${endTime}`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
   }

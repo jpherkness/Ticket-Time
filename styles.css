@@ -146,4 +146,40 @@ nav a.router-link-active {
 /* custom */
 body {
   margin: 0;
+  color: #8899a6;
+}
+
+h2, h3 { 
+  color: #8899a6;
+}
+
+select {
+  color: white;
+  border-radius: 5px;
+  border: none;
+  background: #8899a6;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+select:focus {
+  outline:0;
+}
+
+button {
+  color: white;
+  border-radius: 5px;
+  background: #DDE4ED;
+  padding: 10px;
+  font-size: 15px; 
+  font-weight: bold;
+}
+
+button:focus {
+  outline:0;
 }

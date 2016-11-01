@@ -7,7 +7,6 @@ import { AuthService } from '../services/auth.service'
     selector: 'home',
     template: `
     <div class="login-wrapper">
-    {{authService.authUserId}}
      email: <input type="text" [(ngModel)]="email" />
      password: <input type="text" [(ngModel)]="password" />
      <button (click)="submit()">Login</button>

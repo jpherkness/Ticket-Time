@@ -1,11 +1,13 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { MovieDetail }  from './movie-detail.component';
 
 @NgModule({
   'imports': [ 
-     BrowserModule
+     BrowserModule,
+     FormsModule
   ],
   'declarations': [ 
      MovieDetail
