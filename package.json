@@ -6,6 +6,7 @@
     "start": "mysql-ctl start && concurrently \"node server.js\"",
     "start-d": "mysql-ctl start && concurrently \"gulp\" \"node server.js\"",
     "lint": "tslint ./app/**/*.ts -t verbose",
+    "postinstall": "typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings"
