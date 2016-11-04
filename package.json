@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Movie ticket reservation web applciation.",
   "scripts": {
-    "heroku-prebuild": " heroku config:set NODE_ENV=production"
+    "heroku-prebuild": " heroku config:set NODE_ENV=production",
     "start": "mysql-ctl start && concurrently \"node server.js\"",
     "start-d": "mysql-ctl start && concurrently \"gulp\" \"node server.js\"",
     "lint": "tslint ./app/**/*.ts -t verbose",
