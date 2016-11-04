@@ -14,9 +14,11 @@
   "keywords": [],
   "author": "Joseph Herkness, Joshua Herkness, Kenneth Robinson",
   "license": "MIT",
-  "dependencies": {
+  "engines":{
     "node": "~4.5.0",
     "npm": "~2.15.9",
+  },
+  "dependencies": {
     "@angular/common": "~2.0.1",
     "@angular/compiler": "~2.0.1",
     "@angular/core": "~2.0.1",
