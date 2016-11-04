@@ -8,19 +8,20 @@ import { Observable } from 'rxjs/Rx';
     selector: 'home',
     template: `
     <div class="home-wrapper">
+      <div class='nav-bar'>
+        <div class="logo" (click)='navigateHome($event)'>Ticket Time</div>
+        <div class='right'>
+          <span class='welcome' *ngIf='authService.isLoggedIn()'>Hello, {{ (currentUser | async)?.first_name }} {{ (currentUser | async)?.last_name }}</span>
+          <button *ngIf='authService.isLoggedIn()' (click)="logout()">Logout</button>
+          <button *ngIf='!authService.isLoggedIn()' (click)="login()">Login</button>
+        </div>
+      </div>
       <div class='container'>
-        <div class="tickets">
+        <div *ngIf='isLoggedIn' class="tickets">
           <!-- Tickets here -->
+          <reservation-list></reservation-list>
         </div>
         <div class="content">
-          <div class='nav-bar'>
-            <div class="logo">Ticket Time</div>
-            <div class='right'>
-              <span class='welcome' *ngIf='authService.isLoggedIn()'>Hello, {{ (currentUser | async)?.first_name }} {{ (currentUser | async)?.last_name }}</span>
-              <button *ngIf='authService.isLoggedIn()' (click)="logout()">Logout</button>
-              <button *ngIf='!authService.isLoggedIn()' (click)="login()">Login</button>
-            </div>
-          </div>
           <router-outlet></router-outlet>
         </div>
       </div>
@@ -45,5 +46,13 @@ export class Home {
     
     login() {
       this.router.navigate(['/login']);
+    }
+    
+    navigateHome(event) {
+      this.router.navigate(['/']);
+    }
+    
+    get isLoggedIn() {
+      return this.authService.isLoggedIn();
     }
 }

@@ -4,12 +4,14 @@ import { RouterModule } from '@angular/router';
 
 import { Home }  from './home.component';
 
+import { ReservationListModule }  from '../reservation-list/reservation-list.module';
 import { AuthService } from '../services/auth.service';
 
 @NgModule({
   'imports': [ 
      BrowserModule,
-     RouterModule
+     RouterModule,
+     ReservationListModule
   ],
   'declarations': [ 
      Home

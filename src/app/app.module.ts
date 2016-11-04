@@ -12,6 +12,7 @@ import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 import { MovieListModule } from './movie-list/movie-list.module';
 import { MovieDetailModule } from './movie-detail/movie-detail.module';
+import { ReservationListModule } from './reservation-list/reservation-list.module';
 
 import { AppRoutingModule } from './app-routing.module'
 

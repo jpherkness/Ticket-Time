@@ -16,14 +16,17 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  
-  background: #ffffff;
-  border-bottom: 1px solid #DDE4ED;
+  background: #0FACF3;/*#7076fd;*/
+  color: white;
   padding: 20px;
 }
 
 .nav-bar .logo {
   flex: 0 0 auto;
+}
+
+.nav-bar .logo:hover{
+  cursor: pointer;
 }
 
 .nav-bar .right {
@@ -37,15 +40,16 @@
 
 .nav-bar button {
   color: white;
-  border-radius: 5px;
-  background: #DDE4ED;
-  padding: 10px;
-  font-size: 15px; 
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  padding: 10px 20px;
+  border-radius: 1000px;
+  background: transparent;
+  font-size: 13px; 
   font-weight: bold;
 }
 
 .nav-bar button:hover {
-  background: #81ceff;
+  border-color: white;
 }
 
 .home-wrapper .container {
@@ -57,7 +61,7 @@
 }
 
 .container .tickets {
-  background-color: #f5f8fa; /*#1a192f;*/
+  background-color: rgb(232, 237, 242);
   width: 300px;
   overflow-y: auto;
 }
@@ -65,5 +69,4 @@
 .container .content {
   flex: 1;
   overflow-y: auto;
-  border-left: 1px solid #DDE4ED;
 }

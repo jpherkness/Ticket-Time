@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 /* Master Styles */
 h1 {
   color: #369; 
@@ -144,20 +146,21 @@ nav a.router-link-active {
 
 
 /* custom */
+
 body {
   margin: 0;
   color: #8899a6;
+  font-family: 'Open Sans', sans-serif;
 }
 
-h2, h3 { 
+h1, h2, h3 { 
   color: #8899a6;
+  font-family: 'Open Sans', sans-serif;
 }
 
 select {
-  color: white;
+  background: transparent;
   border-radius: 5px;
-  border: none;
-  background: #8899a6;
   margin-right: 10px;
   margin-bottom: 10px;
   padding: 10px;
@@ -182,4 +185,15 @@ button {
 
 button:focus {
   outline:0;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #7076fd;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }

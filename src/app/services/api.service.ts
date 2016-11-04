@@ -26,8 +26,21 @@ export class ApiService {
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
   }
+  
+  getReservations(userId: number): Observable<Object[]> {
+    return this.http.get(`${this.baseUrl}/reservations/?user_id=${userId}`)
+      .map(res => this.extractData(res))
+      .catch(err => this.handleError(err))
+  }
+  
+  getShowtime(showtimeId: number): Observable<Object[]> {
+    return this.http.get(`${this.baseUrl}/showtime/?showtime_id=${showtimeId}`)
+      .map(res => this.extractData(res))
+      .catch(err => this.handleError(err))
+  }
      
   private extractData(res: Response) {
+    console.log(res);
     let body = res.json();
     return body || { };
   }

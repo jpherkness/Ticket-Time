@@ -5,5 +5,8 @@
     "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
     "node": "registry:dt/node#6.0.0+20160831021119",
     "selenium-webdriver": "registry:dt/selenium-webdriver#2.44.0+20160317120654"
+  },
+  "ambientDependencies": {
+    "socket-io-client":"github:DefinitelyTyped/DefinitelyTyped/socket.io-client/socket.io-client.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd"
   }
 }
