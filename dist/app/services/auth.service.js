@@ -16,7 +16,7 @@ let AuthService = class AuthService {
     constructor(router, http) {
         this.router = router;
         this.http = http;
-        this.baseUrl = 'https://ticket-time.herokuapp.com/api';
+        this.baseUrl = 'https://ticket-time-jpherkness.c9users.io/api';
     }
     // TODO: Refactor this.
     login(email, password) {

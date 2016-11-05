@@ -94,4 +94,5 @@ var updateReservation = (reservation, done) => {
 
 module.exports.createReservation = createReservation;
 module.exports.deleteReservation = deleteReservation;
+module.exports.updateReservation = updateReservation;
 module.exports.getConnection = getConnection;

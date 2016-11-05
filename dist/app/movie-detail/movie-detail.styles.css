@@ -31,7 +31,7 @@
 /* Style the showtime buttons */
 
 .showtime {
-  background: #0FACF3;
+  background: #6cb5f3;
   margin-right: 10px;
   margin-bottom: 10px;
 }
@@ -44,13 +44,13 @@
   width: 200px
 }
 select {
-  color: #8899a6;
-  border: 2px solid #8899a6;
+  color: #cedce3;
+  border: 2px solid #cedce3;
 }
 
 select:hover {
-  color: #0FACF3;
-  border: 2px solid #0FACF3;
+  color: #6cb5f3;
+  border: 2px solid #6cb5f3;
 }
 select:focus {
   outline:0;

@@ -14,9 +14,9 @@ const platform_browser_1 = require('@angular/platform-browser');
 const forms_1 = require('@angular/forms');
 const http_1 = require('@angular/http');
 const app_component_1 = require('./app.component');
-// import { ROUTES } from './app.routes';
 const home_module_1 = require('./home/home.module');
 const login_module_1 = require('./login/login.module');
+const signup_module_1 = require('./signup/signup.module');
 const movie_list_module_1 = require('./movie-list/movie-list.module');
 const movie_detail_module_1 = require('./movie-detail/movie-detail.module');
 const app_routing_module_1 = require('./app-routing.module');
@@ -32,6 +32,7 @@ AppModule = __decorate([
             movie_list_module_1.MovieListModule,
             movie_detail_module_1.MovieDetailModule,
             login_module_1.LoginModule,
+            signup_module_1.SignUpModule,
             app_routing_module_1.AppRoutingModule
         ],
         declarations: [

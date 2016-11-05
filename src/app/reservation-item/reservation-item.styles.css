@@ -52,8 +52,8 @@
 .reservation-button {
   border-radius: 15px;
   margin: 10px;
-  border: 2px solid #8899a6;
-  color: #8899a6;
+  border: 2px solid #cedce3;
+  color: #cedce3;
   background: transparent;
   width: 30px;
   height: 30px;
@@ -64,8 +64,8 @@
 }
 
 .reservation-button:hover {
-  border: 2px solid #0FACF3;
-  color: #0FACF3;
+  border: 2px solid #6cb5f3;
+  color: #6cb5f3;
 }
 
 .reservation-quantity {

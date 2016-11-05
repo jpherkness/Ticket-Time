@@ -46,7 +46,7 @@ import * as io from 'socket.io-client';
 export class MovieDetail{
   
     movie: any;
-    showtimes: any = [];
+    showtimes: Array<any> = [];
     groupedShowtimes: any = {};
     selectedDay: string;
     socket: any;
@@ -78,7 +78,7 @@ export class MovieDetail{
       });
     }
     
-    private groupShowtimes(showtimes) {
+    private groupShowtimes(showtimes: Array<any>) {
       var groupedShowtimes = {};
       for (var showtime of showtimes) {
         var date = new Date(showtime.time);
@@ -99,7 +99,7 @@ export class MovieDetail{
     }
     
     // Possibly move over to api?
-    private clickShowtime(showtime) {
+    private clickShowtime(showtime: any) {
       this.authService.getCurrentUser()
         .subscribe( currentUser => {
           if (!currentUser) return

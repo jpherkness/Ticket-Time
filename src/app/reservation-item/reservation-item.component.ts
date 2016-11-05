@@ -4,6 +4,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
+import * as io from 'socket.io-client';
+
 @Component({
     moduleId: module.id,
     selector: 'reservation-item',
@@ -34,6 +36,7 @@ export class ReservationItem {
     
     showtime: any;
     movie: any;
+    socket: any;
     
     constructor (public apiService: ApiService,
                  public authService: AuthService,
@@ -42,13 +45,18 @@ export class ReservationItem {
     }
     
     ngOnInit() {
+      this.socket = io();
+      this.socket.on('reservation:updated', (reservation: any) => {
+        if (this.reservation.reservation_id == reservation.reservation_id) {
+          this.reservation = reservation;
+        }
+      });
       this.loadShowtime(this.reservation.showtime_id, function() {
           this.loadMovie(this.showtime.movie_id);
       }.bind(this));
-      console.log(this.reservation);
     }
     
-    private loadShowtime(showtime_id: number, complete) {
+    private loadShowtime(showtime_id: number, complete: Function) {
       this.apiService.getShowtime(showtime_id)
       .subscribe(showtime => {
         this.showtime = showtime;
@@ -63,17 +71,23 @@ export class ReservationItem {
       });
     }
     
-    private headerClicked(event) {
+    private headerClicked(event: any) {
       if (this.movie.movie_id) {
         this.router.navigate(['/home/movie', this.movie.movie_id]);
       }
     }
     
-    private incrementClicked(event) {
-      console.log('Increment Clicked');
+    private incrementClicked(event: any) {
+      var newReservation = this.reservation;
+      newReservation.quantity += 1;
+      this.socket.emit('reservation:update', newReservation);
     }
     
-    private decrementClicked(event) {
-      console.log('Decrement Clicked');
+    private decrementClicked(event: any) {
+      if (this.reservation.quantity > 1) {
+        var newReservation = this.reservation;
+        newReservation.quantity -= 1;
+        this.socket.emit('reservation:update', newReservation);
+      }
     }
 }

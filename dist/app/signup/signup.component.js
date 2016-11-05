@@ -11,49 +11,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 const core_1 = require('@angular/core');
 const router_1 = require('@angular/router');
 const auth_service_1 = require('../services/auth.service');
-let Login = class Login {
+let SignUp = class SignUp {
     constructor(authService, router) {
         this.authService = authService;
         this.router = router;
         this.email = "";
         this.password = "";
-        this.showPassword = false;
+        this.password_verification = "";
+        this.firstName = "";
+        this.lastName = "";
     }
-    // Authenticate user.
+    // Create user in backend
     submit() {
-        this.authService.login(this.email, this.password);
+        // TODO: Create user
     }
-    // Navigate user to signup page.
-    navigateSignUp() {
-        this.router.navigate(['/signup']);
+    // Route the user to the login page.
+    navigateLogin(event) {
+        this.router.navigate(['/login']);
     }
 };
-Login = __decorate([
+SignUp = __decorate([
     core_1.Component({
         moduleId: module.id,
-        selector: 'login',
+        selector: 'signup',
         template: `
-    <div class="login-wrapper">
-      <div class="card">
-        <div class="header">Login</div>
-        <p>Email</p>
-        <input type="text" placeholder="Enter your email" [(ngModel)]="email" />
-        <p>Password</p> 
-        <input *ngIf="showPassword" type="text" placeholder="Enter your password" [(ngModel)]="password" />
-        <input *ngIf="!showPassword" type="password" placeholder="Enter your password" [(ngModel)]="password" />
-        <!--<span style="cursor: pointer;" (click)="showPassword = !showPassword">Show</span>-->
-        <div>
-          <button (click)="submit()">Login</button>
-        </div>
-        <a (click)="navigateSignUp()">Don't have an account?</a>
-      </div>
+    <div class="signup-wrapper">
+     email: <input type="text" [(ngModel)]="email" />
+     password: <input type="text" [(ngModel)]="password" />
+     verify password: <input type="text" [(ngModel)]="password_verification" />
+     First Name: <input type="text" [(ngModel)]="firstName" />
+     Last Name: <input type="text" [(ngModel)]="lastName" />
+     <button (click)="submit()">Signup</button>
+     <button (click)="navigateLogin($event)">Already have an account</button>
     </div>
     `,
-        styleUrls: ['login.styles.css'],
+        styleUrls: ['signup.styles.css'],
         providers: [auth_service_1.AuthService]
     }), 
     __metadata('design:paramtypes', [auth_service_1.AuthService, router_1.Router])
-], Login);
-exports.Login = Login;
+], SignUp);
+exports.SignUp = SignUp;
 
-//# sourceMappingURL=login.component.js.map
+//# sourceMappingURL=signup.component.js.map

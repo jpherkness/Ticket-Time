@@ -12,6 +12,7 @@ const core_1 = require('@angular/core');
 const router_1 = require('@angular/router');
 const home_component_1 = require('./home/home.component');
 const login_component_1 = require('./login/login.component');
+const signup_component_1 = require('./signup/signup.component');
 const movie_list_component_1 = require('./movie-list/movie-list.component');
 const movie_detail_component_1 = require('./movie-detail/movie-detail.component');
 const auth_guard_service_1 = require('./services/auth-guard.service');
@@ -25,7 +26,8 @@ exports.routes = [
             { path: 'movie/:id', component: movie_detail_component_1.MovieDetail }
         ]
     },
-    { path: 'login', component: login_component_1.Login, canActivate: [auth_guard_service_1.AuthGuard] }
+    { path: 'login', component: login_component_1.Login, canActivate: [auth_guard_service_1.AuthGuard] },
+    { path: 'signup', component: signup_component_1.SignUp, canActivate: [auth_guard_service_1.AuthGuard] }
 ];
 let AppRoutingModule = class AppRoutingModule {
 };

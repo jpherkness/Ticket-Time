@@ -14,7 +14,7 @@ const core_1 = require('@angular/core');
 let ApiService = class ApiService {
     constructor(http) {
         this.http = http;
-        this.baseUrl = 'https://ticket-time.herokuapp.com/api';
+        this.baseUrl = 'https://ticket-time-jpherkness.c9users.io/api';
     }
     getMovies() {
         return this.http.get(`${this.baseUrl}/movie`)

@@ -12,6 +12,7 @@ const core_1 = require('@angular/core');
 const router_1 = require('@angular/router');
 const api_service_1 = require('../services/api.service');
 const auth_service_1 = require('../services/auth.service');
+const io = require('socket.io-client');
 let ReservationItem = class ReservationItem {
     constructor(apiService, authService, route, router) {
         this.apiService = apiService;
@@ -20,10 +21,15 @@ let ReservationItem = class ReservationItem {
         this.router = router;
     }
     ngOnInit() {
+        this.socket = io();
+        this.socket.on('reservation:updated', (reservation) => {
+            if (this.reservation.reservation_id == reservation.reservation_id) {
+                this.reservation = reservation;
+            }
+        });
         this.loadShowtime(this.reservation.showtime_id, function () {
             this.loadMovie(this.showtime.movie_id);
         }.bind(this));
-        console.log(this.reservation);
     }
     loadShowtime(showtime_id, complete) {
         this.apiService.getShowtime(showtime_id)
@@ -44,10 +50,16 @@ let ReservationItem = class ReservationItem {
         }
     }
     incrementClicked(event) {
-        console.log('Increment Clicked');
+        var newReservation = this.reservation;
+        newReservation.quantity += 1;
+        this.socket.emit('reservation:update', newReservation);
     }
     decrementClicked(event) {
-        console.log('Decrement Clicked');
+        if (this.reservation.quantity > 1) {
+            var newReservation = this.reservation;
+            newReservation.quantity -= 1;
+            this.socket.emit('reservation:update', newReservation);
+        }
     }
 };
 __decorate([
