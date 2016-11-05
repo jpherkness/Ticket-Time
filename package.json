@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Movie ticket reservation web applciation.",
   "scripts": {
-    "start": "mysql-ctl start && concurrently \"node server.js\"",
-    "start-d": "mysql-ctl start && concurrently \"gulp\" \"node server.js\"",
+    "start": "mysql-ctl start && concurrently \"gulp\" \"node server.js\"",
     "lint": "tslint ./app/**/*.ts -t verbose",
+    "postinstall": "typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings"
@@ -42,7 +42,9 @@
     "socket.io-client": "^1.5.1",
     "systemjs": "0.19.39",
     "unirest": "^0.5.1",
-    "zone.js": "^0.6.25",
+    "zone.js": "^0.6.25"
+  },
+  "devDependencies": {
     "concurrently": "^3.0.0",
     "lite-server": "^2.2.2",
     "typescript": "^2.0.3",
