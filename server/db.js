@@ -13,7 +13,6 @@ var getConnection = function(callback) {
         callback(err, connection);
     });
 };
-module.exports = getConnection;
 
 var createReservation = (reservation, done) => {
   // Read the properties of the reservation
@@ -95,3 +94,4 @@ var updateReservation = (reservation, done) => {
 
 module.exports.createReservation = createReservation;
 module.exports.deleteReservation = deleteReservation;
+module.exports.getConnection = getConnection;
