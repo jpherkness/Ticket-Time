@@ -43,10 +43,10 @@
     "systemjs": "0.19.39",
     "unirest": "^0.5.1",
     "zone.js": "^0.6.25",
-    "typings": "^1.4.0"
+    "typings": "^1.4.0",
+    "concurrently": "^3.0.0"
   },
   "devDependencies": {
-    "concurrently": "^3.0.0",
     "lite-server": "^2.2.2",
     "typescript": "^2.0.3",
     "canonical-path": "0.0.2",
