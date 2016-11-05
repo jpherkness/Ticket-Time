@@ -83,8 +83,8 @@ var updateReservation = (reservation, done) => {
   getConnection((err, connection) => {
     if (err) throw err;
     connection.query(`
-    INSERT INTO reservation (user_id, showtime_id, quantity)
-  	VALUE (${user_id}, ${showtime_id}, ${quantity})`, 
+    UPDATE reservation SET quantity=${reservation.quantity}
+    WHERE reservation_id=${reservation.reservation_id}`, 
     (err, rows, fields) => {
       connection.release();
       done(err, reservation)

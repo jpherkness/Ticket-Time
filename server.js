@@ -34,9 +34,9 @@ io.on('connection', (socket) => {
   
   // Update a reservation
   socket.on('reservation:update', (reservation) => {
-    db.updateReservation(reservation, (err, reservation) => {
+    db.updateReservation(reservation, (err, res) => {
       if (err) throw err;
-      io.emit('reservation:updated', reservation);
+      io.emit('reservation:updated', res);
     })
   });
   

@@ -4,6 +4,7 @@ jspm_packages
 link-checker-results.txt
 **/*npm-debug.log.*
 _temp
+dist/**
 
 !systemjs.config.js
 !typings/typings.d.ts

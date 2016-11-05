@@ -6,7 +6,7 @@ import { Http, Response } from '@angular/http';
 @Injectable()
 export class AuthService {
   
-  private baseUrl: string = 'https://ticket-time-jpherkness.c9users.io/api';
+  private baseUrl: string = '/api';
   
   constructor(private router: Router,
               private http: Http){}
