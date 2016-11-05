@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-	'host'     : 'mysql://b7d1ee028b5ad9:2be9ecbb@us-cdbr-iron-east-04.cleardb.net/heroku_dd803884342ea93?reconnect=true',
+	'host'     : 'us-cdbr-iron-east-04.cleardb.net/heroku_dd803884342ea93?reconnect=true',
 	'user'     : 'b7d1ee028b5ad9',
 	'password' : '2be9ecbb',
 	'database' : 'ticket_time'
