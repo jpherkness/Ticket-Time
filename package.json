@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Movie ticket reservation web applciation.",
   "scripts": {
-    "start": "mysql-ctl start && concurrently \"gulp\" \"node server.js\"",
+    "start": "concurrently \"gulp\" \"node server.js\"",
     "lint": "tslint ./app/**/*.ts -t verbose",
     "postinstall": "typings install",
     "tsc": "tsc",
