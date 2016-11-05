@@ -14,12 +14,15 @@ var router = express.Router();
 // ============================================================================
 
 router.get('/user', (req, res, next) => {
-	db.query(`
-		SELECT * FROM  user`, 
-		(err, rows, fields) => {
-			if (err) throw err
-			res.send(rows);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT * FROM  user`, 
+			(err, rows, fields) => {
+				if (err) throw err
+				res.send(rows);
+			});
+	});
 });
 
 // ============================================================================
@@ -27,14 +30,17 @@ router.get('/user', (req, res, next) => {
 // ============================================================================
 
 router.get('/user/:id', (req, res, next) => {
-	db.query(`
-		SELECT * FROM user
-		WHERE user_id=${req.params.id}`, 
-		(err, rows, fields) => {
-			if (err) throw err
-			if (rows.length < 1) res.send(null);
-			res.send(rows[0]);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT * FROM user
+			WHERE user_id=${req.params.id}`, 
+			(err, rows, fields) => {
+				if (err) throw err
+				if (rows.length < 1) res.send(null);
+				res.send(rows[0]);
+			});
+	});
 });
 
 
@@ -49,15 +55,18 @@ router.get('/auth', (req, res, next) => {
 	var password = req.query.password;
 	
 	// Perform Query
-	db.query(`
-		SELECT * FROM user
-		WHERE email='${email}'
-		AND password='${password}'`, 
-		(err, rows, fields) => {
-			if (err) throw err
-			if (rows.length < 1) res.send(null);
-			res.send(rows[0]);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT * FROM user
+			WHERE email='${email}'
+			AND password='${password}'`, 
+			(err, rows, fields) => {
+				if (err) throw err
+				if (rows.length < 1) res.send(null);
+				res.send(rows[0]);
+			});
+	});
 });
 
 // ============================================================================
@@ -65,12 +74,15 @@ router.get('/auth', (req, res, next) => {
 // ============================================================================
 
 router.get('/movie', (req, res, next) => {
-	db.query(`
-		SELECT * FROM  movie`, 
-		(err, rows, fields) => {
-			if (err) throw err
-			res.send(rows);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT * FROM  movie`, 
+			(err, rows, fields) => {
+				if (err) throw err
+				res.send(rows);
+			});
+	});
 });
 
 // ============================================================================
@@ -78,14 +90,17 @@ router.get('/movie', (req, res, next) => {
 // ============================================================================
 
 router.get('/movie/:id', (req, res, next) => {
-	db.query(`
-		SELECT * FROM movie
-		WHERE movie_id=${req.params.id}`, 
-		(err, rows, fields) => {
-			if (err) throw err;
-			if (rows.length < 1) res.send(null);
-			res.send(rows[0]);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT * FROM movie
+			WHERE movie_id=${req.params.id}`, 
+			(err, rows, fields) => {
+				if (err) throw err;
+				if (rows.length < 1) res.send(null);
+				res.send(rows[0]);
+			});
+	});
 });
 
 // ============================================================================
@@ -103,19 +118,22 @@ router.get('/showtimes', (req, res, next) => {
 	// Potential validation ???
 	
 	// Perform query
-	db.query(`
-		SELECT *, (SELECT SUM(quantity)
-		FROM reservation AS R
-		WHERE R.showtime_id=S.showtime_id) as current_capacity
-		FROM showtime AS S
-		WHERE movie_id=${movie_id}
-		AND time BETWEEN '${start_time}' AND '${end_time}'
-		ORDER BY time`,
-		(err, rows, fields) => {
-			if (err) throw err;
-			// Return showtimes
-			res.send(rows);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT *, (SELECT SUM(quantity)
+			FROM reservation AS R
+			WHERE R.showtime_id=S.showtime_id) as current_capacity
+			FROM showtime AS S
+			WHERE movie_id=${movie_id}
+			AND time BETWEEN '${start_time}' AND '${end_time}'
+			ORDER BY time`,
+			(err, rows, fields) => {
+				if (err) throw err;
+				// Return showtimes
+				res.send(rows);
+			});
+	});
 });
 
 router.get('/showtime', (req, res, next) => {
@@ -126,14 +144,17 @@ router.get('/showtime', (req, res, next) => {
 	// Potential validation ???
 	
 	// Perform query
-	db.query(`
-		SELECT * FROM showtime
-		WHERE showtime_id=${showtime_id}`,
-		(err, rows, fields) => {
-			if (err) throw err;
-			if (rows < 1) return;
-			res.send(rows[0]);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT * FROM showtime
+			WHERE showtime_id=${showtime_id}`,
+			(err, rows, fields) => {
+				if (err) throw err;
+				if (rows < 1) return;
+				res.send(rows[0]);
+			});
+	});
 });
 
 // ============================================================================
@@ -149,13 +170,16 @@ router.get('/reservations', (req, res, next) => {
 	// Potential validation ???
 	
 	// Perform query
-	db.query(`
-		SELECT * FROM reservation
-		WHERE user_id=${user_id}`,
-		(err, rows, fields) => {
-			if (err) throw err
-			res.send(rows);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT * FROM reservation
+			WHERE user_id=${user_id}`,
+			(err, rows, fields) => {
+				if (err) throw err
+				res.send(rows);
+			});
+	});
 });
 
 // ============================================================================
@@ -176,16 +200,19 @@ router.post('/reservation', (req, res, next) => {
 		maximumCapacity(showtime_id, (max_capacity) => {
 			if (max_capacity - capacity >= quantity) {
 				// Okay they didn't request too many tickets
-				db.query(`
-					INSERT INTO reservation (user_id, showtime_id, quantity)
-					VALUE (${user_id}, ${showtime_id}, ${quantity})`,
-					(err, rows, fields) => {
-						if (err) throw err;
-						res.send({
-							success: true, 
-							message: 'Successfully created'
+				db.getConnection((err, connection) => {
+    			if (err) throw err;
+					connection.query(`
+						INSERT INTO reservation (user_id, showtime_id, quantity)
+						VALUE (${user_id}, ${showtime_id}, ${quantity})`,
+						(err, rows, fields) => {
+							if (err) throw err;
+							res.send({
+								success: true, 
+								message: 'Successfully created'
+							});
 						});
-					});
+				});
 			} else {
 				res.send({
 					success: false, 
@@ -205,16 +232,19 @@ router.delete('/reservation', (req, res, next) => {
 	// Read the body
 	var reservation_id = req.body.reservation_id;
 	
-	db.query(`
-		DELETE FROM reservation
-		WHERE reservation_id=${reservation_id}`,
-		(err, rows, fields) => {
-			if (err) throw err;
-			res.send({
-				success: true, 
-				message: 'Successfully deleted' 
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			DELETE FROM reservation
+			WHERE reservation_id=${reservation_id}`,
+			(err, rows, fields) => {
+				if (err) throw err;
+				res.send({
+					success: true, 
+					message: 'Successfully deleted' 
+				});
 			});
-		});
+	});
 });
 
 // ============================================================================
@@ -235,39 +265,48 @@ router.patch('/reservation', (req, res, next) => {
 // ============================================================================
 
 var currentCapacity = (showtime_id, done) => {
-	db.query(`
-		SELECT SUM(quantity)
-		FROM reservation
-		WHERE showtime_id=${showtime_id}`,
-		(err, rows, fields) => {
-			if (err) throw err;
-			var capacity = rows[0]['SUM(quantity)'];
-			done(capacity);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT SUM(quantity)
+			FROM reservation
+			WHERE showtime_id=${showtime_id}`,
+			(err, rows, fields) => {
+				if (err) throw err;
+				var capacity = rows[0]['SUM(quantity)'];
+				done(capacity);
+			});
+	});
 }
 
 var maximumCapacity = (showtime_id, done) => {
-	db.query(`
-		SELECT * FROM showtime
-		WHERE showtime_id=${showtime_id}`,
-		(err, rows, fields) => {
-			if (err) throw err;
-			if (rows.length == 0) done(0);
-			var max_capacity = rows[0]['max_capacity'];
-			done(max_capacity);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT * FROM showtime
+			WHERE showtime_id=${showtime_id}`,
+			(err, rows, fields) => {
+				if (err) throw err;
+				if (rows.length == 0) done(0);
+				var max_capacity = rows[0]['max_capacity'];
+				done(max_capacity);
+			});
+	});
 }
 
 var getShowtimeID = (reservation_id, done) => {
-	db.query(`
-		SELECT * FROM reservation
-		WHERE reservation_id=${reservation_id}`, 
-		(err, rows, fields) => {
-			if (err) throw err;
-			if (rows.length == 0) done(null);
-			var showtime_id = rows[0]['showtime_id'];
-			done(showtime_id);
-		});
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+		connection.query(`
+			SELECT * FROM reservation
+			WHERE reservation_id=${reservation_id}`, 
+			(err, rows, fields) => {
+				if (err) throw err;
+				if (rows.length == 0) done(null);
+				var showtime_id = rows[0]['showtime_id'];
+				done(showtime_id);
+			});
+	});
 }
 
 // ============================================================================
