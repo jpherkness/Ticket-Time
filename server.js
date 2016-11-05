@@ -43,4 +43,4 @@ io.on('connection', (socket) => {
 });
 
 // Begin listening
-server.listen(process.env.PORT);
+server.listen(process.env.PORT || 8080);
