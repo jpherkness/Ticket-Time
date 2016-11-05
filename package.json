@@ -42,9 +42,7 @@
     "socket.io-client": "^1.5.1",
     "systemjs": "0.19.39",
     "unirest": "^0.5.1",
-    "zone.js": "^0.6.25"
-  },
-  "devDependencies": {
+    "zone.js": "^0.6.25",
     "concurrently": "^3.0.0",
     "lite-server": "^2.2.2",
     "typescript": "^2.0.3",
