@@ -19,6 +19,7 @@ router.get('/user', (req, res, next) => {
 		connection.query(`
 			SELECT * FROM  user`, 
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err
 				res.send(rows);
 			});
@@ -36,6 +37,7 @@ router.get('/user/:id', (req, res, next) => {
 			SELECT * FROM user
 			WHERE user_id=${req.params.id}`, 
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err
 				if (rows.length < 1) res.send(null);
 				res.send(rows[0]);
@@ -62,6 +64,7 @@ router.get('/auth', (req, res, next) => {
 			WHERE email='${email}'
 			AND password='${password}'`, 
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err
 				if (rows.length < 1) res.send(null);
 				res.send(rows[0]);
@@ -79,6 +82,7 @@ router.get('/movie', (req, res, next) => {
 		connection.query(`
 			SELECT * FROM  movie`, 
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err
 				res.send(rows);
 			});
@@ -96,6 +100,7 @@ router.get('/movie/:id', (req, res, next) => {
 			SELECT * FROM movie
 			WHERE movie_id=${req.params.id}`, 
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err;
 				if (rows.length < 1) res.send(null);
 				res.send(rows[0]);
@@ -129,6 +134,7 @@ router.get('/showtimes', (req, res, next) => {
 			AND time BETWEEN '${start_time}' AND '${end_time}'
 			ORDER BY time`,
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err;
 				// Return showtimes
 				res.send(rows);
@@ -150,6 +156,7 @@ router.get('/showtime', (req, res, next) => {
 			SELECT * FROM showtime
 			WHERE showtime_id=${showtime_id}`,
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err;
 				if (rows < 1) return;
 				res.send(rows[0]);
@@ -176,6 +183,7 @@ router.get('/reservations', (req, res, next) => {
 			SELECT * FROM reservation
 			WHERE user_id=${user_id}`,
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err
 				res.send(rows);
 			});
@@ -206,6 +214,7 @@ router.post('/reservation', (req, res, next) => {
 						INSERT INTO reservation (user_id, showtime_id, quantity)
 						VALUE (${user_id}, ${showtime_id}, ${quantity})`,
 						(err, rows, fields) => {
+							connection.release();
 							if (err) throw err;
 							res.send({
 								success: true, 
@@ -238,6 +247,7 @@ router.delete('/reservation', (req, res, next) => {
 			DELETE FROM reservation
 			WHERE reservation_id=${reservation_id}`,
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err;
 				res.send({
 					success: true, 
@@ -272,6 +282,7 @@ var currentCapacity = (showtime_id, done) => {
 			FROM reservation
 			WHERE showtime_id=${showtime_id}`,
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err;
 				var capacity = rows[0]['SUM(quantity)'];
 				done(capacity);
@@ -286,6 +297,7 @@ var maximumCapacity = (showtime_id, done) => {
 			SELECT * FROM showtime
 			WHERE showtime_id=${showtime_id}`,
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err;
 				if (rows.length == 0) done(0);
 				var max_capacity = rows[0]['max_capacity'];
@@ -301,6 +313,7 @@ var getShowtimeID = (reservation_id, done) => {
 			SELECT * FROM reservation
 			WHERE reservation_id=${reservation_id}`, 
 			(err, rows, fields) => {
+				connection.release();
 				if (err) throw err;
 				if (rows.length == 0) done(null);
 				var showtime_id = rows[0]['showtime_id'];

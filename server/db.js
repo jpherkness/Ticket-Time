@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 
 var pool = mysql.createPool({
+  'connectionLimit' : 10,
 	'host'     : 'us-cdbr-iron-east-04.cleardb.net',
 	'user'     : 'b7d1ee028b5ad9',
 	'password' : '2be9ecbb',
@@ -37,6 +38,7 @@ var createReservation = (reservation, done) => {
       		SELECT * FROM reservation
       		WHERE reservation_id=LAST_INSERT_ID();`,
       		(err, rows, fields) => {
+      		  connection.release();
       			if (err) {
       			  done(err, null);
       			}
@@ -62,6 +64,7 @@ var deleteReservation = (reservation, done) => {
   		DELETE FROM reservation 
   		WHERE reservation_id=${reservation.reservation_id}`,
   		(err, rows, fields) => {
+  		  connection.release();
   			done(err, reservation);
   		});
   });
@@ -84,6 +87,7 @@ var updateReservation = (reservation, done) => {
     INSERT INTO reservation (user_id, showtime_id, quantity)
   	VALUE (${user_id}, ${showtime_id}, ${quantity})`, 
     (err, rows, fields) => {
+      connection.release();
       done(err, reservation)
     });
   });
