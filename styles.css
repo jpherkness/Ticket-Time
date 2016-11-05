@@ -150,12 +150,10 @@ nav a.router-link-active {
 body {
   margin: 0;
   color: #8899a6;
-  font-family: 'Open Sans', sans-serif;
 }
 
 h1, h2, h3 { 
   color: #8899a6;
-  font-family: 'Open Sans', sans-serif;
 }
 
 select {

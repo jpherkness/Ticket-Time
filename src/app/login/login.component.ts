@@ -9,16 +9,14 @@ import { AuthService } from '../services/auth.service'
     <div class="login-wrapper">
       <div class="card">
         <div class="header">Login</div>
-        <p>Email</p>
-        <input type="text" placeholder="Enter your email" [(ngModel)]="email" />
-        <p>Password</p> 
-        <input *ngIf="showPassword" type="text" placeholder="Enter your password" [(ngModel)]="password" />
-        <input *ngIf="!showPassword" type="password" placeholder="Enter your password" [(ngModel)]="password" />
+        <input type="text" placeholder="Email" [(ngModel)]="email" />
+        <input *ngIf="showPassword" type="text" placeholder="Password" [(ngModel)]="password" />
+        <input *ngIf="!showPassword" type="password" placeholder="Password" [(ngModel)]="password" />
         <!--<span style="cursor: pointer;" (click)="showPassword = !showPassword">Show</span>-->
-        <div>
-          <button (click)="submit()">Login</button>
+        <div class="button-collection">
+          <button class="primary" (click)="submit()">Login</button>
+          <button class="secondary" (click)="navigateSignUp()">Create Account?</button>
         </div>
-        <a (click)="navigateSignUp()">Don't have an account?</a>
       </div>
     </div>
     `,

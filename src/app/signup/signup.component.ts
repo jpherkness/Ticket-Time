@@ -7,13 +7,18 @@ import { AuthService } from '../services/auth.service'
     selector: 'signup',
     template: `
     <div class="signup-wrapper">
-     email: <input type="text" [(ngModel)]="email" />
-     password: <input type="text" [(ngModel)]="password" />
-     verify password: <input type="text" [(ngModel)]="password_verification" />
-     First Name: <input type="text" [(ngModel)]="firstName" />
-     Last Name: <input type="text" [(ngModel)]="lastName" />
-     <button (click)="submit()">Signup</button>
-     <button (click)="navigateLogin($event)">Already have an account</button>
+      <div class="card">
+        <div class="header">Create Account</div>
+        <input type="text" placeholder="First Name" [(ngModel)]="firstName" />
+        <input type="text" placeholder="Last Name" [(ngModel)]="lastName" />
+        <input type="text" placeholder="Email" [(ngModel)]="email" />
+        <input *ngIf="!showPassword" type="password" placeholder="Password" [(ngModel)]="password" />
+        <input *ngIf="!showPassword" type="password" placeholder="Password Again" [(ngModel)]="passwordVerification" />
+        <div class="button-collection">
+          <button class="primary" (click)="submit()">Create</button>
+          <button class="secondary" (click)="navigateLogin()">Have Account?</button>
+        </div>
+      </div>
     </div>
     `,
     styleUrls: ['signup.styles.css'],
@@ -23,7 +28,7 @@ export class SignUp {
   
   email: string = "";
   password: string = "";
-  password_verification: string = "";
+  passwordVerification: string = "";
   firstName: string = "";
   lastName: string = "";
   
