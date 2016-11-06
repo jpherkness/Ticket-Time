@@ -29,6 +29,25 @@ export class AuthService {
         }
       );
   }
+
+  // TODO: Turn this into a callback that sends res
+  public signup(user: any){
+    this.http.post(`${this.baseUrl}/user`, user)
+      .subscribe(
+        res => {
+          console.log(res);
+          var body = this.extractData(res);
+          var user = body.user;
+          if (user.user_id) {
+            localStorage.setItem('auth_user_id', user.user_id);
+            this.router.navigate(['/home']);
+          }
+        },
+        err => {
+          console.log('Sign Up Error')
+        }
+      );
+  }
      
   public logout() {
     localStorage.removeItem('auth_user_id');

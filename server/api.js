@@ -27,6 +27,65 @@ router.get('/user', (req, res, next) => {
 });
 
 // ============================================================================
+// Creates a user
+// ============================================================================
+
+router.post('/user', (req, res, next) => {
+
+	var user = req.body;
+
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+
+    connection.query(`
+			SELECT * FROM user
+			WHERE email='${user.email}';`, 
+			(err, rows, fields) => {
+				if (err) throw err;
+				if (rows.length == 1) {
+					// User already exists
+					res.send({"success": false, "message": "That email is already taken."})
+				} else {
+					// User doesn't exist
+					connection.query(`
+						INSERT INTO user(first_name, last_name, email, password)
+						VALUES('${user.first_name}', '${user.last_name}', '${user.email}', '${user.password}');`, 
+						(err, rows, fields) => {
+							if (err) throw err;
+							if (rows.insertId) {
+								user.user_id = rows.insertId;
+								res.send({"success": true, "user": user});
+							} else {
+								res.send({"success": false, "user": null, "message": "User could not be created."});
+							}
+					});
+				}
+		});
+	});
+});
+
+// ============================================================================
+// Deletes a user
+// ============================================================================
+
+router.delete('/user', (req, res, next) => {
+
+	var user_id = req.body.user_id;
+
+	db.getConnection((err, connection) => {
+    if (err) throw err;
+
+    connection.query(`
+			DELETE FROM user
+			WHERE user_id=${user_id}`, 
+			(err, result) => {
+				if (err) throw err;
+				res.send({"message" : `deleted ${result.affectedRows} rows`});
+		});
+	});
+});
+
+// ============================================================================
 // Return a specific user object based on the id
 // ============================================================================
 
@@ -35,7 +94,7 @@ router.get('/user/:id', (req, res, next) => {
     if (err) throw err;
 		connection.query(`
 			SELECT * FROM user
-			WHERE user_id=${req.params.id}`, 
+			WHERE user_id=${req.params.id};`, 
 			(err, rows, fields) => {
 				connection.release();
 				if (err) throw err
