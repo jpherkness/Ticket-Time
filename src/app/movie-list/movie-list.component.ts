@@ -29,7 +29,7 @@ export class MovieList {
         .subscribe( movies => this.movies = movies);
     }
     
-    onClick(event) {
+    onClick(event: Event) {
       console.log(event);
       this.router.navigate(['/home/movie', event]);
     }

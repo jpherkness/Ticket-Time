@@ -29,7 +29,7 @@ export class ReservationList {
                  private route: ActivatedRoute,
                  private router: Router){ 
       this.socket = io();
-      this.socket.on('reservation:created', (reservation) => {
+      this.socket.on('reservation:created', (reservation: any) => {
         this.reservations.push(reservation);
         console.log(reservation);
       });

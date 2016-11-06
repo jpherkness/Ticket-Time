@@ -112,7 +112,7 @@ export class MovieDetail{
         });
     }
     
-    private clickBack(event) {
+    private clickBack(event: Event) {
       this.location.back();
     }
     

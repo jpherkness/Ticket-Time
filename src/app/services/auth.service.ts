@@ -57,7 +57,7 @@ export class AuthService {
     return localStorage.getItem('auth_user_id') != null;
   }
   
-  public getCurrentUser(): Observable<Object> {
+  public getCurrentUser(): Observable<any> {
     if (this.isLoggedIn()) {
       let id = this.getCurrentUserId();
       return this.http.get(`${this.baseUrl}/user/${id}`)
