@@ -36,7 +36,10 @@ gulp.task('copy', () => {
 // Browser Sync
 gulp.task('browser-sync', () => {
     browserSync.init({
-        proxy: "localhost:8080",
+        proxy: {
+            target: "localhost:8080",
+            ws: true
+        },
         notify: true,
         browser: "google chrome"
     });

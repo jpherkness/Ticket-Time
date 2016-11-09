@@ -14,16 +14,13 @@ var router = express.Router();
 // ============================================================================
 
 router.get('/user', (req, res, next) => {
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
-			SELECT * FROM  user`, 
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err
-				res.send(rows);
-			});
-	});
+    db.query(`
+			SELECT * FROM  user`,
+        (err, rows, fields) => {
+
+            if (err) throw err
+            res.send(rows);
+        });
 });
 
 // ============================================================================
@@ -32,36 +29,42 @@ router.get('/user', (req, res, next) => {
 
 router.post('/user', (req, res, next) => {
 
-	var user = req.body;
+    var user = req.body;
 
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-
-    connection.query(`
+    db.query(`
 			SELECT * FROM user
-			WHERE email='${user.email}';`, 
-			(err, rows, fields) => {
-				if (err) throw err;
-				if (rows.length == 1) {
-					// User already exists
-					res.send({"success": false, "message": "That email is already taken."})
-				} else {
-					// User doesn't exist
-					connection.query(`
-						INSERT INTO user(first_name, last_name, email, password)
-						VALUES('${user.first_name}', '${user.last_name}', '${user.email}', '${user.password}');`, 
-						(err, rows, fields) => {
-							if (err) throw err;
-							if (rows.insertId) {
-								user.user_id = rows.insertId;
-								res.send({"success": true, "user": user});
-							} else {
-								res.send({"success": false, "user": null, "message": "User could not be created."});
-							}
-					});
-				}
-		});
-	});
+			WHERE email='${user.email}';`,
+        (err, rows, fields) => {
+            if (err) throw err;
+            if (rows.length == 1) {
+                // User already exists
+                res.send({
+                    "success": false,
+                    "message": "That email is already taken."
+                })
+            } else {
+                // User doesn't exist
+                query(`
+									INSERT INTO user(first_name, last_name, email, password)
+									VALUES('${user.first_name}', '${user.last_name}', '${user.email}', '${user.password}');`,
+                    (err, rows, fields) => {
+                        if (err) throw err;
+                        if (rows.insertId) {
+                            user.user_id = rows.insertId;
+                            res.send({
+                                "success": true,
+                                "user": user
+                            });
+                        } else {
+                            res.send({
+                                "success": false,
+                                "user": null,
+                                "message": "User could not be created."
+                            });
+                        }
+                    });
+            }
+        });
 });
 
 // ============================================================================
@@ -70,19 +73,17 @@ router.post('/user', (req, res, next) => {
 
 router.delete('/user', (req, res, next) => {
 
-	var user_id = req.body.user_id;
+    var user_id = req.body.user_id;
 
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-
-    connection.query(`
+    db.query(`
 			DELETE FROM user
-			WHERE user_id=${user_id}`, 
-			(err, result) => {
-				if (err) throw err;
-				res.send({"message" : `deleted ${result.affectedRows} rows`});
-		});
-	});
+			WHERE user_id=${user_id}`,
+        (err, result) => {
+            if (err) throw err;
+            res.send({
+                "message": `deleted ${result.affectedRows} rows`
+            });
+        });
 });
 
 // ============================================================================
@@ -90,18 +91,15 @@ router.delete('/user', (req, res, next) => {
 // ============================================================================
 
 router.get('/user/:id', (req, res, next) => {
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+    db.query(`
 			SELECT * FROM user
-			WHERE user_id=${req.params.id};`, 
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err
-				if (rows.length < 1) res.send(null);
-				res.send(rows[0]);
-			});
-	});
+			WHERE user_id=${req.params.id};`,
+        (err, rows, fields) => {
+
+            if (err) throw err
+            if (rows.length < 1) res.send(null);
+            res.send(rows[0]);
+        });
 });
 
 
@@ -110,25 +108,22 @@ router.get('/user/:id', (req, res, next) => {
 // ============================================================================
 
 router.get('/auth', (req, res, next) => {
-	
-	// Read Params
-	var email = req.query.email;
-	var password = req.query.password;
-	
-	// Perform Query
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+
+    // Read Params
+    var email = req.query.email;
+    var password = req.query.password;
+
+    // Perform Query
+    db.query(`
 			SELECT * FROM user
 			WHERE email='${email}'
-			AND password='${password}'`, 
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err
-				if (rows.length < 1) res.send(null);
-				res.send(rows[0]);
-			});
-	});
+			AND password='${password}'`,
+        (err, rows, fields) => {
+
+            if (err) throw err
+            if (rows.length < 1) res.send(null);
+            res.send(rows[0]);
+        });
 });
 
 // ============================================================================
@@ -136,16 +131,13 @@ router.get('/auth', (req, res, next) => {
 // ============================================================================
 
 router.get('/movie', (req, res, next) => {
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
-			SELECT * FROM  movie`, 
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err
-				res.send(rows);
-			});
-	});
+    db.query(`
+			SELECT * FROM  movie`,
+        (err, rows, fields) => {
+
+            if (err) throw err
+            res.send(rows);
+        });
 });
 
 // ============================================================================
@@ -153,18 +145,15 @@ router.get('/movie', (req, res, next) => {
 // ============================================================================
 
 router.get('/movie/:id', (req, res, next) => {
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+    db.query(`
 			SELECT * FROM movie
-			WHERE movie_id=${req.params.id}`, 
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err;
-				if (rows.length < 1) res.send(null);
-				res.send(rows[0]);
-			});
-	});
+			WHERE movie_id=${req.params.id}`,
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            if (rows.length < 1) res.send(null);
+            res.send(rows[0]);
+        });
 });
 
 // ============================================================================
@@ -173,18 +162,16 @@ router.get('/movie/:id', (req, res, next) => {
 // ============================================================================
 
 router.get('/showtimes', (req, res, next) => {
-	
-	// Read params
-	var movie_id = req.query.movie_id;
-	var start_time = req.query.start_time;
-	var end_time = req.query.end_time;
-	
-	// Potential validation ???
-	
-	// Perform query
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+
+    // Read params
+    var movie_id = req.query.movie_id;
+    var start_time = req.query.start_time;
+    var end_time = req.query.end_time;
+
+    // Potential validation ???
+
+    // Perform query
+    db.query(`
 			SELECT *, (SELECT SUM(quantity)
 			FROM reservation AS R
 			WHERE R.showtime_id=S.showtime_id) as current_capacity
@@ -192,35 +179,31 @@ router.get('/showtimes', (req, res, next) => {
 			WHERE movie_id=${movie_id}
 			AND time BETWEEN '${start_time}' AND '${end_time}'
 			ORDER BY time`,
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err;
-				// Return showtimes
-				res.send(rows);
-			});
-	});
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            // Return showtimes
+            res.send(rows);
+        });
 });
 
 router.get('/showtime', (req, res, next) => {
-	
-	// Read params
-	var showtime_id = req.query.showtime_id;
-	
-	// Potential validation ???
-	
-	// Perform query
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+
+    // Read params
+    var showtime_id = req.query.showtime_id;
+
+    // Potential validation ???
+
+    // Perform query
+    db.query(`
 			SELECT * FROM showtime
 			WHERE showtime_id=${showtime_id}`,
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err;
-				if (rows < 1) return;
-				res.send(rows[0]);
-			});
-	});
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            if (rows < 1) return;
+            res.send(rows[0]);
+        });
 });
 
 // ============================================================================
@@ -229,24 +212,21 @@ router.get('/showtime', (req, res, next) => {
 // ============================================================================
 
 router.get('/reservations', (req, res, next) => {
-	
-	// Read params
-	var user_id = req.query.user_id;
-	
-	// Potential validation ???
-	
-	// Perform query
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+
+    // Read params
+    var user_id = req.query.user_id;
+
+    // Potential validation ???
+
+    // Perform query
+    db.query(`
 			SELECT * FROM reservation
 			WHERE user_id=${user_id}`,
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err
-				res.send(rows);
-			});
-	});
+        (err, rows, fields) => {
+
+            if (err) throw err
+            res.send(rows);
+        });
 });
 
 // ============================================================================
@@ -254,41 +234,38 @@ router.get('/reservations', (req, res, next) => {
 // ============================================================================
 
 router.post('/reservation', (req, res, next) => {
-	
-	// Read the body
-	var showtime_id = req.body.showtime_id;
-	var user_id = req.body.user_id;
-	var quantity = req.body.quantity;
-	
-	// Potential validation?
-	
-	// Perform query
-	currentCapacity(showtime_id, (capacity) => {
-		maximumCapacity(showtime_id, (max_capacity) => {
-			if (max_capacity - capacity >= quantity) {
-				// Okay they didn't request too many tickets
-				db.getConnection((err, connection) => {
-    			if (err) throw err;
-					connection.query(`
+
+    // Read the body
+    var showtime_id = req.body.showtime_id;
+    var user_id = req.body.user_id;
+    var quantity = req.body.quantity;
+
+    // Potential validation?
+
+    // Perform query
+    currentCapacity(showtime_id, (capacity) => {
+        maximumCapacity(showtime_id, (max_capacity) => {
+            if (max_capacity - capacity >= quantity) {
+                // Okay they didn't request too many tickets
+                db.query(`
 						INSERT INTO reservation (user_id, showtime_id, quantity)
 						VALUE (${user_id}, ${showtime_id}, ${quantity})`,
-						(err, rows, fields) => {
-							connection.release();
-							if (err) throw err;
-							res.send({
-								success: true, 
-								message: 'Successfully created'
-							});
-						});
-				});
-			} else {
-				res.send({
-					success: false, 
-					message: 'Exceeds capacity' 
-				});
-			}
-		});
-	});
+                    (err, rows, fields) => {
+
+                        if (err) throw err;
+                        res.send({
+                            success: true,
+                            message: 'Successfully created'
+                        });
+                    });
+            } else {
+                res.send({
+                    success: false,
+                    message: 'Exceeds capacity'
+                });
+            }
+        });
+    });
 });
 
 // ============================================================================
@@ -296,24 +273,21 @@ router.post('/reservation', (req, res, next) => {
 // ============================================================================
 
 router.delete('/reservation', (req, res, next) => {
-	
-	// Read the body
-	var reservation_id = req.body.reservation_id;
-	
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+
+    // Read the body
+    var reservation_id = req.body.reservation_id;
+
+    db.query(`
 			DELETE FROM reservation
 			WHERE reservation_id=${reservation_id}`,
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err;
-				res.send({
-					success: true, 
-					message: 'Successfully deleted' 
-				});
-			});
-	});
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            res.send({
+                success: true,
+                message: 'Successfully deleted'
+            });
+        });
 });
 
 // ============================================================================
@@ -321,12 +295,12 @@ router.delete('/reservation', (req, res, next) => {
 // ============================================================================
 
 router.patch('/reservation', (req, res, next) => {
-	
-	// Read the body
-	var reservation_id = req.body.showtime_id;
-	var quantity = req.body.quantity;
-	
-	// TODO: Implement this!!!
+
+    // Read the body
+    var reservation_id = req.body.showtime_id;
+    var quantity = req.body.quantity;
+
+    // TODO: Implement this!!!
 });
 
 // ============================================================================
@@ -334,51 +308,42 @@ router.patch('/reservation', (req, res, next) => {
 // ============================================================================
 
 var currentCapacity = (showtime_id, done) => {
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+    db.query(`
 			SELECT SUM(quantity)
 			FROM reservation
 			WHERE showtime_id=${showtime_id}`,
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err;
-				var capacity = rows[0]['SUM(quantity)'];
-				done(capacity);
-			});
-	});
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            var capacity = rows[0]['SUM(quantity)'];
+            done(capacity);
+        });
 }
 
 var maximumCapacity = (showtime_id, done) => {
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+    db.query(`
 			SELECT * FROM showtime
 			WHERE showtime_id=${showtime_id}`,
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err;
-				if (rows.length == 0) done(0);
-				var max_capacity = rows[0]['max_capacity'];
-				done(max_capacity);
-			});
-	});
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            if (rows.length == 0) done(0);
+            var max_capacity = rows[0]['max_capacity'];
+            done(max_capacity);
+        });
 }
 
 var getShowtimeID = (reservation_id, done) => {
-	db.getConnection((err, connection) => {
-    if (err) throw err;
-		connection.query(`
+    db.query(`
 			SELECT * FROM reservation
-			WHERE reservation_id=${reservation_id}`, 
-			(err, rows, fields) => {
-				connection.release();
-				if (err) throw err;
-				if (rows.length == 0) done(null);
-				var showtime_id = rows[0]['showtime_id'];
-				done(showtime_id);
-			});
-	});
+			WHERE reservation_id=${reservation_id}`,
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            if (rows.length == 0) done(null);
+            var showtime_id = rows[0]['showtime_id'];
+            done(showtime_id);
+        });
 }
 
 // ============================================================================
@@ -386,13 +351,13 @@ var getShowtimeID = (reservation_id, done) => {
 // ============================================================================
 
 router.post('/import', (req, res, next) => {
-	importer.importMovies();
-	res.send('Importing Movies');
+    importer.importMovies();
+    res.send('Importing Movies...');
 })
 
 router.post('/update', (req, res, next) => {
-	importer.updateShowtimes();
-	res.send('Updating showtimes');
+    importer.updateShowtimes();
+    res.send('Updating showtimes...');
 })
 
 

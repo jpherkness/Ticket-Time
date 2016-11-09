@@ -12,34 +12,34 @@ var db = require('./server/db');
 app.use(bodyParser.json());
 app.use('/api', api);
 app.use(express.static('./'));
-  
+
 // Sockets
 io.on('connection', (socket) => {
-  
-  // Create a reservation
-  socket.on('reservation:create', (reservation) => {
-    db.createReservation(reservation, (err, reservation) => {
-      if(err) throw err;
-      io.emit('reservation:created', reservation);
-    })
-  });
-  
-  // Delete a reservation
-  socket.on('reservation:delete', (reservation) => {
-    db.deleteReservation(reservation, (err, reservation) => {
-      if (err) throw err;
-      io.emit('reservation:deleted', reservation);
-    })
-  });
-  
-  // Update a reservation
-  socket.on('reservation:update', (reservation) => {
-    db.updateReservation(reservation, (err, res) => {
-      if (err) throw err;
-      io.emit('reservation:updated', res);
-    })
-  });
-  
+
+    // Create a reservation
+    socket.on('reservation:create', (reservation) => {
+        db.createReservation(reservation, (err, reservation) => {
+            if (err) throw err;
+            io.emit('reservation:created', reservation);
+        });
+    });
+
+    // Delete a reservation
+    socket.on('reservation:delete', (reservation) => {
+        db.deleteReservation(reservation, (err, reservation) => {
+            if (err) throw err;
+            io.emit('reservation:deleted', reservation);
+        })
+    });
+
+    // Update a reservation
+    socket.on('reservation:update', (reservation) => {
+        db.updateReservation(reservation, (err, res) => {
+            if (err) throw err;
+            io.emit('reservation:updated', res);
+        });
+    });
+
 });
 
 // Begin listening

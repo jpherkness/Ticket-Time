@@ -40,7 +40,6 @@ export class ApiService {
   }
      
   private extractData(res: Response) {
-    console.log(res);
     let body = res.json();
     return body || { };
   }

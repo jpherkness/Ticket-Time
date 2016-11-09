@@ -24,6 +24,7 @@ import * as io from 'socket.io-client';
         <button class='reservation-button' (click)='decrementClicked($event)'>-</button>
         <span class='reservation-quantity'>{{reservation.quantity}}</span>
         <button class='reservation-button' (click)='incrementClicked($event)'>+</button>
+        <button class='reservation-button' (click)='deleteClicked($event)'>X</button>
       </div>
     </div>
     `,
@@ -46,11 +47,13 @@ export class ReservationItem {
     
     ngOnInit() {
       this.socket = io();
+
       this.socket.on('reservation:updated', (reservation: any) => {
         if (this.reservation.reservation_id == reservation.reservation_id) {
           this.reservation = reservation;
         }
       });
+
       this.loadShowtime(this.reservation.showtime_id, function() {
           this.loadMovie(this.showtime.movie_id);
       }.bind(this));
@@ -89,5 +92,9 @@ export class ReservationItem {
         newReservation.quantity -= 1;
         this.socket.emit('reservation:update', newReservation);
       }
+    }
+
+    private deleteClicked(event: Event) {
+      this.socket.emit('reservation:delete', this.reservation);
     }
 }

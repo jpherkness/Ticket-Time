@@ -1,98 +1,78 @@
 var mysql = require('mysql');
 
 var pool = mysql.createPool({
-  'connectionLimit' : 10,
-	'host'     : 'us-cdbr-iron-east-04.cleardb.net',
-	'user'     : 'b7d1ee028b5ad9',
-	'password' : '2be9ecbb',
-	'database' : 'heroku_dd803884342ea93'
+    'connectionLimit': 10,
+    'host': 'us-cdbr-iron-east-04.cleardb.net',
+    'user': 'b7d1ee028b5ad9',
+    'password': '2be9ecbb',
+    'database': 'heroku_dd803884342ea93',
+    'waitForConnections': true,
 });
 
-var getConnection = function(callback) {
-    pool.getConnection(function(err, connection) {
-        callback(err, connection);
-    });
-};
-
 var createReservation = (reservation, done) => {
-  // Read the properties of the reservation
-  var user_id = reservation.user_id;
-  var showtime_id = reservation.showtime_id;
-  var quantity = reservation.quantity;
-  
-  // Check to make sure these properties are okay
-  if (!user_id || !showtime_id || !quantity) return;
-  
-  // Perform operation
-  getConnection((err, connection) => {
-    if (err) throw err;
-    connection.query(`
+    // Read the properties of the reservation
+    var user_id = reservation.user_id;
+    var showtime_id = reservation.showtime_id;
+    var quantity = reservation.quantity;
+
+    // Check to make sure these properties are okay
+    if (!user_id || !showtime_id || !quantity) return;
+
+    // Perform operation
+    pool.query(`
   		INSERT INTO reservation (user_id, showtime_id, quantity)
   		VALUE (${user_id}, ${showtime_id}, ${quantity});`,
-  		(err, rows, fields) => {
-  		  if (err){
-  		    done(err, null);
-  		  }
-  			connection.query(`
-      		SELECT * FROM reservation
-      		WHERE reservation_id=LAST_INSERT_ID();`,
-      		(err, rows, fields) => {
-      		  connection.release();
-      			if (err) {
-      			  done(err, null);
-      			}
-      			if (rows.length < 1) return;
-      			done(null, rows[0]);
-      		});
-  		}); 
-  });
+        (err, results) => {
+            if (err) done(err, null);
+            if (results.insertId) {
+                pool.query(`
+                  SELECT * FROM reservation
+                  WHERE reservation_id=${results.insertId}`,
+                    (err, rows, fields) => {
+                        if (err) done(err, null);
+                        if (rows.length > 0) done(null, rows[0]);
+                    });
+            }
+        });
 };
 
 var deleteReservation = (reservation, done) => {
-  
-  // Read the properties of the reservation
-  var reservation_id = reservation.reservation_id;
-  
-  // Check to make sure these properties are okay
-  if (!reservation_id) return;
-  
-  // Perform operation
-  getConnection((err, connection) => {
-    if (err) throw err;
-    connection.query(`
+
+    // Read the properties of the reservation
+    var reservation_id = reservation.reservation_id;
+
+    // Check to make sure these properties are okay
+    if (!reservation_id) return;
+
+    // Perform operation
+    pool.query(`
   		DELETE FROM reservation 
   		WHERE reservation_id=${reservation.reservation_id}`,
-  		(err, rows, fields) => {
-  		  connection.release();
-  			done(err, reservation);
-  		});
-  });
+        (err, rows, fields) => {
+            done(err, reservation);
+        });
 };
 
 var updateReservation = (reservation, done) => {
-  
-  // Read the properties of the reservation
-  var user_id = reservation.user_id;
-  var showtime_id = reservation.showtime_id;
-  var quantity = reservation.quantity;
-  
-  // Check to make sure these properties are okay
-  if (!user_id || !showtime_id || !quantity) return;
-  
-  // Perform operation
-  getConnection((err, connection) => {
-    if (err) throw err;
-    connection.query(`
+
+    // Read the properties of the reservation
+    var user_id = reservation.user_id;
+    var showtime_id = reservation.showtime_id;
+    var quantity = reservation.quantity;
+
+    // Check to make sure these properties are okay
+    if (!user_id || !showtime_id || !quantity) return;
+
+    // Perform operation
+    pool.query(`
     UPDATE reservation SET quantity=${reservation.quantity}
-    WHERE reservation_id=${reservation.reservation_id}`, 
-    (err, rows, fields) => {
-      connection.release();
-      done(err, reservation)
-    });
-  });
+    WHERE reservation_id=${reservation.reservation_id}`,
+        (err, rows, fields) => {
+            done(err, reservation)
+        });
 };
 
+module.exports = pool
 module.exports.createReservation = createReservation;
 module.exports.deleteReservation = deleteReservation;
 module.exports.updateReservation = updateReservation;
-module.exports.getConnection = getConnection;

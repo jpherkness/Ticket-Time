@@ -32,7 +32,7 @@ var importMovies = () => {
 };
 
 var importMovieDetails = (movie_id, done) => {
-  unirest("GET", "https://api.themoviedb.org/3/movie/" + movie_id)
+  unirest("GET", `https://api.themoviedb.org/3/movie/${movie_id}`)
   .query({"language": "en-US", "api_key": key})
   .headers({"content-type": "application/json"})
   .type("json")
@@ -45,9 +45,9 @@ var importMovieDetails = (movie_id, done) => {
         'description':  res.body.overview,
         'release_date':  res.body.release_date,
         'rating':  res.body.vote_average,
-        'poster_url': 'https://image.tmdb.org/t/p/w500' +  res.body.poster_path,
+        'poster_url': res.body.poster_path ? `https://image.tmdb.org/t/p/w500${res.body.poster_path}` : null,
         'runtime' :  res.body.runtime,
-        'backdrop_url': res.body.backdrop_path ? 'https://image.tmdb.org/t/p/original' +  res.body.backdrop_path : null
+        'backdrop_url': res.body.backdrop_path ? `https://image.tmdb.org/t/p/original${res.body.backdrop_path}` : null
       };
     done(movie);
   });
@@ -59,12 +59,12 @@ var importMovieDetails = (movie_id, done) => {
 
 var insertMovieIntoDatabase = (movie) => {
   db.query(
-    `INSERT IGNORE INTO movie 
-     SET ?`, 
-    movie, 
-    function(err, result) {
-    if (err) throw err
-  });
+      `INSERT IGNORE INTO movie 
+       SET ?`, movie, 
+      (err, result) => {
+      if (err) throw err
+      console.log(`MOVIE: Imported movie with id ${movie.movie_id}`);
+    });
 }
 
 // ============================================================================
@@ -72,12 +72,12 @@ var insertMovieIntoDatabase = (movie) => {
 // ============================================================================
 
 var importActors = (movie_id) => {
-  unirest('GET', 'https://api.themoviedb.org/3/movie/' + movie_id + 'credits')
+  unirest('GET', `https://api.themoviedb.org/3/movie/${movie_id}/credits`)
   .query({'language': 'en-US', 'api_key': key})
   .headers({'content-type': 'application/json'})
   .type('json')
   .send({})
-  .end( function (res) {
+  .end((res) => {
     
     if (res.error) throw new Error(res.error);
     
@@ -98,36 +98,36 @@ var importActors = (movie_id) => {
 var updateShowtimes = () => {
   // Get the current date
   var now = new Date();
-  
   db.query(`
-    SELECT movie_id FROM movie`, 
-    (err, rows, fields) => {
-      if (err) throw err
-      for (var row of rows) {
-        
-        var showtimeDate = new Date(now.getTime());
-        showtimeDate.setMinutes(0);
-        showtimeDate.setSeconds(0);
-        showtimeDate.setMilliseconds(0);
-        for (var day = 0; day < 7; day++) {
-          showtimeDate.setDate(showtimeDate.getDate() + 1);
-          for (var hour = 1; hour < 5; hour++) {
-            showtimeDate.setHours(18 + hour);
-            showtimeDate.setMinutes(showtimeDate.getMinutes() + 15);
-            addShowtime(row.movie_id, showtimeDate);
+      SELECT movie_id FROM movie`, 
+      (err, rows, fields) => {
+        if (err) throw err
+        for (var row of rows) {
+          
+          var showtimeDate = new Date(now.getTime());
+          showtimeDate.setMinutes(0);
+          showtimeDate.setSeconds(0);
+          showtimeDate.setMilliseconds(0);
+          for (var day = 0; day < 7; day++) {
+            showtimeDate.setDate(showtimeDate.getDate() + 1);
+            for (var hour = 1; hour < 5; hour++) {
+              showtimeDate.setHours(18 + hour);
+              showtimeDate.setMinutes(showtimeDate.getMinutes() + 15);
+              insertShowtimeIntoDatabase(row.movie_id, showtimeDate);
+            }
           }
         }
-      }
-  });
+    });
 }
 
-var addShowtime = (movie_id, date) => {
+var insertShowtimeIntoDatabase = (movie_id, date) => {
   db.query(`
-    INSERT INTO showtime (movie_id, time, max_capacity) 
-    VALUES (${movie_id}, '${date.toISOString()}', 30)`, 
-    (err, rows, fields) => {
-      if (err) throw err
-  });
+      INSERT INTO showtime (movie_id, time, max_capacity) 
+      VALUES (${movie_id}, '${date.toISOString()}', 30)`, 
+      (err, rows, fields) => {
+        if (err) throw err
+          console.log(`SHOWTIME: Created new showtime`);
+    });
 }
 
 

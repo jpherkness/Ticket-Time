@@ -29,9 +29,14 @@ export class ReservationList {
                  private route: ActivatedRoute,
                  private router: Router){ 
       this.socket = io();
+
       this.socket.on('reservation:created', (reservation: any) => {
         this.reservations.push(reservation);
-        console.log(reservation);
+      });
+
+      this.socket.on('reservation:deleted', (deleted: any) => {
+        this.reservations = this.reservations
+        .filter((r) => r.reservation_id != deleted.reservation_id);
       });
     }
     
