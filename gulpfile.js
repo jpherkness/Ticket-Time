@@ -51,3 +51,4 @@ gulp.task('reload', () => {
 });
 
 gulp.task('default', ['clean', 'compile', 'copy', 'watch', 'browser-sync']);
+gulp.task('production', ['clean', 'compile', 'copy']);

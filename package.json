@@ -6,8 +6,8 @@
   "author": "Joseph Herkness, Joshua Herkness",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"gulp\" \"node server.js\"",
-    "postinstall": "typings install"
+    "start": "node server.js",
+    "postinstall": "typings install && gulp production"
   },
   "dependencies": {
     "@angular/common": "~2.1.2",
