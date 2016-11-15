@@ -32,8 +32,8 @@ router.post('/user', (req, res, next) => {
     var user = req.body;
 
     db.query(`
-			SELECT * FROM user
-			WHERE email='${user.email}';`,
+		SELECT * FROM user
+		WHERE email='${user.email}';`,
         (err, rows, fields) => {
             if (err) throw err;
             if (rows.length == 1) {
@@ -44,9 +44,9 @@ router.post('/user', (req, res, next) => {
                 })
             } else {
                 // User doesn't exist
-                query(`
-									INSERT INTO user(first_name, last_name, email, password)
-									VALUES('${user.first_name}', '${user.last_name}', '${user.email}', '${user.password}');`,
+                db.query(`
+					INSERT INTO user(first_name, last_name, email, password)
+				    VALUES('${user.first_name}', '${user.last_name}', '${user.email}', '${user.password}');`,
                     (err, rows, fields) => {
                         if (err) throw err;
                         if (rows.insertId) {
