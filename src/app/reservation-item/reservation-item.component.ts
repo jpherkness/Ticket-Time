@@ -16,15 +16,15 @@ import * as io from 'socket.io-client';
         'background-position':'center', 
         'background-size':'cover'}" (click)='headerClicked($event)'>
         <div *ngIf='movie' class='title'>{{movie.title}}</div>
-        <span *ngIf='showtime' class='date'>{{showtime.time.replace('T', ' ').replace('Z', '') | date: 'EEEE, MMMM d'}}</span>
-        <span *ngIf='showtime' class='time'>{{showtime.time.replace('T', ' ').replace('Z', '') | date: 'h:m a'}}</span>
+        <span *ngIf='showtime' class='date'>{{showtime.time | date: 'EEEE, MMMM d' : 'UTC'}}</span>
+        <span *ngIf='showtime' class='time'>{{showtime.time | date:'h:mm a' : 'UTC'}}</span>
       </div>
       <div class='reservation-sub'>Admit</div>
       <div>
         <button class='reservation-button' (click)='decrementClicked($event)'>-</button>
         <span class='reservation-quantity'>{{reservation.quantity}}</span>
         <button class='reservation-button' (click)='incrementClicked($event)'>+</button>
-        <button class='reservation-button' (click)='deleteClicked($event)'>X</button>
+        <button class='reservation-button delete-button' (click)='deleteClicked($event)'>X</button>
       </div>
     </div>
     `,

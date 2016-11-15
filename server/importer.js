@@ -98,21 +98,23 @@ var importActors = (movie_id) => {
 var updateShowtimes = () => {
   // Get the current date
   var now = new Date();
+  db.query('delete from showtime', null);
   db.query(`
       SELECT movie_id FROM movie`, 
       (err, rows, fields) => {
         if (err) throw err
         for (var row of rows) {
-          
-          var showtimeDate = new Date(now.getTime());
-          showtimeDate.setMinutes(0);
-          showtimeDate.setSeconds(0);
-          showtimeDate.setMilliseconds(0);
           for (var day = 0; day < 7; day++) {
-            showtimeDate.setDate(showtimeDate.getDate() + 1);
-            for (var hour = 1; hour < 5; hour++) {
-              showtimeDate.setHours(18 + hour);
-              showtimeDate.setMinutes(showtimeDate.getMinutes() + 15);
+            for (var hour = 0; hour < 4; hour++) {
+              var showtimeDate = new Date(
+                now.getFullYear(), 
+                now.getMonth(),
+                now.getDate() + day, 
+                18 + hour, 
+                15 * hour, 
+                0, 
+                0);
+              showtimeDate.setMinutes(showtimeDate.getMinutes() - showtimeDate.getTimezoneOffset());
               insertShowtimeIntoDatabase(row.movie_id, showtimeDate);
             }
           }
