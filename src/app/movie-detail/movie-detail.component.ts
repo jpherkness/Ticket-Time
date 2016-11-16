@@ -31,7 +31,7 @@ import * as io from 'socket.io-client';
         </select>
         <div class='movie-showtimes-wrapper'>
           <button *ngFor='let showtime of groupedShowtimes[selectedDay]' class='showtime' (click)='clickShowtime(showtime)'>
-            {{showtime.time | date:'h:mm a' : 'EST'}}
+            {{showtime.time | date:'h:mm a' : 'EST'}} test
           </button>
         </div>
       </div>
