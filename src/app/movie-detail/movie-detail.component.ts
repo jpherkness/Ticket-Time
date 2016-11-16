@@ -72,6 +72,7 @@ export class MovieDetail{
         
         this.apiService.getShowtimes(id, range.start, range.end)
         .subscribe( showtimes => {
+          console.log("Showtimes: ", showtimes);
           this.showtimes = showtimes;
           this.groupedShowtimes = this.groupShowtimes(showtimes);
           this.selectedDay = this.getShowtimeDates()[0];
@@ -93,6 +94,7 @@ export class MovieDetail{
         }
         groupedShowtimes[date.toISOString()].push(showtime);
       }
+      console.log("Grouped Showtimes:", groupedShowtimes);
       return groupedShowtimes;
     }
     
