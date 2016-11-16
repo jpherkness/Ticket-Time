@@ -21,10 +21,10 @@ import * as io from 'socket.io-client';
       </div>
       <div class='reservation-sub'>Admit</div>
       <div>
-        <button class='reservation-button' (click)='decrementClicked($event)'>-</button>
+        <button class='reservation-button' (click)='decrementClicked($event)'><i class="fa fa-minus"></i></button>
         <span class='reservation-quantity'>{{reservation.quantity}}</span>
-        <button class='reservation-button' (click)='incrementClicked($event)'>+</button>
-        <button class='reservation-button delete-button' (click)='deleteClicked($event)'>X</button>
+        <button class='reservation-button' (click)='incrementClicked($event)'><i class="fa fa-plus"></i></button>
+        <button class='reservation-button delete-button' (click)='deleteClicked($event)'><i class="fa fa-close"></i></button>
       </div>
     </div>
     `,
@@ -34,10 +34,10 @@ import * as io from 'socket.io-client';
 export class ReservationItem {
   
     @Input() reservation: any;
+    @Input() socket: any;
     
     showtime: any;
     movie: any;
-    socket: any;
     
     constructor (public apiService: ApiService,
                  public authService: AuthService,
@@ -46,11 +46,11 @@ export class ReservationItem {
     }
     
     ngOnInit() {
-      this.socket = io();
-
-      this.socket.on('reservation:updated', (reservation: any) => {
-        if (this.reservation.reservation_id == reservation.reservation_id) {
-          this.reservation = reservation;
+      this.socket.on('reservation', (res: any) => {
+        if (res.status == 'updated') {
+          if (this.reservation.reservation_id == res.reservation.reservation_id) {
+            this.reservation = res.reservation;
+          }
         }
       });
 

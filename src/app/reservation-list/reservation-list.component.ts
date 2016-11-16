@@ -12,7 +12,7 @@ import * as io from 'socket.io-client';
     template:`
     <div class="reservation-list-wrapper">
       <div *ngFor='let reservation of reservations' class='reservation-item'>
-        <reservation-item [reservation]='reservation'></reservation-item>
+        <reservation-item [reservation]='reservation' [socket]='socket'></reservation-item>
       </div>
     </div>
     `,
@@ -30,13 +30,13 @@ export class ReservationList {
                  private router: Router){ 
       this.socket = io();
 
-      this.socket.on('reservation:created', (reservation: any) => {
-        this.reservations.push(reservation);
-      });
-
-      this.socket.on('reservation:deleted', (deleted: any) => {
-        this.reservations = this.reservations
-        .filter((r) => r.reservation_id != deleted.reservation_id);
+      this.socket.on('reservation', (res: any) => {
+        if (res.status == 'created') {
+          this.reservations.push(res.reservation);
+        } else if (res.status == 'deleted') {
+          this.reservations = this.reservations
+        .filter((r) => r.reservation_id != res.reservation.reservation_id);
+        }
       });
     }
     

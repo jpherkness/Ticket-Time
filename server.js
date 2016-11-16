@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
     socket.on('reservation:create', (reservation) => {
         db.createReservation(reservation, (err, reservation) => {
             if (err) throw err;
-            io.emit('reservation:created', reservation);
+            io.emit('reservation', {"status": "created", "reservation": reservation});
         });
     });
 
@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
     socket.on('reservation:delete', (reservation) => {
         db.deleteReservation(reservation, (err, reservation) => {
             if (err) throw err;
-            io.emit('reservation:deleted', reservation);
+            io.emit('reservation', {"status": "deleted", "reservation": reservation});
         })
     });
 
@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
     socket.on('reservation:update', (reservation) => {
         db.updateReservation(reservation, (err, res) => {
             if (err) throw err;
-            io.emit('reservation:updated', res);
+            io.emit('reservation', {"status": "updated", "reservation": reservation});
         });
     });
 

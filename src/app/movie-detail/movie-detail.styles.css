@@ -36,9 +36,6 @@
   margin-bottom: 10px;
 }
 
-.showtime:hover {
-}
-
 /* Style the selection component */
 .date-selector {
   width: 200px
@@ -62,4 +59,9 @@ select:focus {
 
 .back:hover {
   cursor: pointer;
+}
+
+.disabled {
+  background: gray;
+  pointer-events: none;
 }
