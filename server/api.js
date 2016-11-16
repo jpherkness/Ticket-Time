@@ -196,8 +196,11 @@ router.get('/showtime', (req, res, next) => {
 
     // Perform query
     db.query(`
-			SELECT * FROM showtime
-			WHERE showtime_id=${showtime_id}`,
+			SELECT *, (SELECT SUM(quantity)
+            FROM reservation AS R
+            WHERE R.showtime_id=S.showtime_id) as current_capacity
+            FROM showtime AS S
+            WHERE movie_id=${movie_id}`,
         (err, rows, fields) => {
 
             if (err) throw err;
