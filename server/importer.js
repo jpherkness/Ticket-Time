@@ -106,16 +106,17 @@ var updateShowtimes = () => {
         for (var row of rows) {
           for (var day = 0; day < 7; day++) {
             for (var hour = 0; hour < 4; hour++) {
+
               var showtimeDate = new Date(
                 now.getFullYear(), 
                 now.getMonth(),
                 now.getDate() + day, 
-                18 + hour, 
+                23 + hour, 
                 15 * hour, 
                 0, 
                 0);
+
               showtimeDate.setMinutes(showtimeDate.getMinutes() - showtimeDate.getTimezoneOffset());
-              showtimeDate.setHours(showtimeDate + 5) // Offset to place in EST.
               insertShowtimeIntoDatabase(row.movie_id, showtimeDate);
             }
           }
@@ -129,7 +130,7 @@ var insertShowtimeIntoDatabase = (movie_id, date) => {
       VALUES (${movie_id}, '${date.toISOString()}', 30)`, 
       (err, rows, fields) => {
         if (err) throw err
-          console.log(`SHOWTIME: Created new showtime`);
+          console.log(`SHOWTIME: Created new showtime ` + date + date.toISOString());
     });
 }
 
