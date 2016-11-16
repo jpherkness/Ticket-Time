@@ -68,7 +68,8 @@ export class MovieDetail{
         .subscribe( movie => this.movie = movie);
         
         let now = new Date()
-        let range = this.getDateTimeStringRangeFromDate(now, 7*24*60*60*1000);
+        let nowUTC = new Date(now.toString() + 'UTC')
+        let range = this.getDateTimeStringRangeFromDate(nowUTC, 7*24*60*60*1000);
         
         this.apiService.getShowtimes(id, range.start, range.end)
         .subscribe( showtimes => {
