@@ -20,7 +20,10 @@ io.on('connection', (socket) => {
     socket.on('reservation:create', (reservation) => {
         db.createReservation(reservation, (err, reservation) => {
             if (err) throw err;
-            io.emit('reservation', {"status": "created", "reservation": reservation});
+            io.emit('reservation', {"event": "created", "reservation": reservation});
+            db.getShowtime(reservation.showtime_id, (showtime) => {
+                io.emit('showtime', {"event": "updated", "showtime": showtime});
+            });
         });
     });
 
@@ -28,7 +31,10 @@ io.on('connection', (socket) => {
     socket.on('reservation:delete', (reservation) => {
         db.deleteReservation(reservation, (err, reservation) => {
             if (err) throw err;
-            io.emit('reservation', {"status": "deleted", "reservation": reservation});
+            io.emit('reservation', {"event": "deleted", "reservation": reservation});
+            db.getShowtime(reservation.showtime_id, (showtime) => {
+                io.emit('showtime', {"event": "updated", "showtime": showtime});
+            });
         })
     });
 
@@ -36,7 +42,10 @@ io.on('connection', (socket) => {
     socket.on('reservation:update', (reservation) => {
         db.updateReservation(reservation, (err, res) => {
             if (err) throw err;
-            io.emit('reservation', {"status": "updated", "reservation": reservation});
+            io.emit('reservation', {"event": "updated", "reservation": reservation});
+            db.getShowtime(reservation.showtime_id, (showtime) => {
+                io.emit('showtime', {"event": "updated", "showtime": showtime});
+            });
         });
     });
 

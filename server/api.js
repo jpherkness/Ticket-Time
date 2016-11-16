@@ -195,18 +195,9 @@ router.get('/showtime', (req, res, next) => {
     // Potential validation ???
 
     // Perform query
-    db.query(`
-			SELECT *, (SELECT SUM(quantity)
-            FROM reservation AS R
-            WHERE R.showtime_id=S.showtime_id) as current_capacity
-            FROM showtime AS S
-            WHERE showtime_id=${showtime_id}`,
-        (err, rows, fields) => {
-
-            if (err) throw err;
-            if (rows < 1) return;
-            res.send(rows[0]);
-        });
+    db.getShowtime(showtime_id, (showtime) => {
+        res.send(showtime);
+    });
 });
 
 // ============================================================================

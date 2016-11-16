@@ -21,8 +21,8 @@ var createReservation = (reservation, done) => {
 
     // Perform operation
     pool.query(`
-  		INSERT INTO reservation (user_id, showtime_id, quantity)
-  		VALUE (${user_id}, ${showtime_id}, ${quantity});`,
+        INSERT INTO reservation (user_id, showtime_id, quantity)
+        VALUE (${user_id}, ${showtime_id}, ${quantity});`,
         (err, results) => {
             if (err) done(err, null);
             if (results.insertId) {
@@ -47,8 +47,8 @@ var deleteReservation = (reservation, done) => {
 
     // Perform operation
     pool.query(`
-  		DELETE FROM reservation 
-  		WHERE reservation_id=${reservation.reservation_id}`,
+        DELETE FROM reservation 
+        WHERE reservation_id=${reservation.reservation_id}`,
         (err, rows, fields) => {
             done(err, reservation);
         });
@@ -66,10 +66,25 @@ var updateReservation = (reservation, done) => {
 
     // Perform operation
     pool.query(`
-    UPDATE reservation SET quantity=${reservation.quantity}
-    WHERE reservation_id=${reservation.reservation_id}`,
+        UPDATE reservation SET quantity=${reservation.quantity}
+        WHERE reservation_id=${reservation.reservation_id}`,
         (err, rows, fields) => {
             done(err, reservation)
+        });
+};
+
+var getShowtime = (showtime_id, done) => {
+    if (showtime_id == null) return;
+    pool.query(`
+        SELECT *, (SELECT SUM(quantity)
+        FROM reservation AS R
+        WHERE R.showtime_id=S.showtime_id) as current_capacity
+        FROM showtime AS S
+        WHERE showtime_id=${showtime_id}`,
+        (err, rows, fields) => {
+            if (err) throw err;
+            if (rows < 1) return;
+            done(rows[0]);
         });
 };
 
@@ -77,3 +92,4 @@ module.exports = pool
 module.exports.createReservation = createReservation;
 module.exports.deleteReservation = deleteReservation;
 module.exports.updateReservation = updateReservation;
+module.exports.getShowtime = getShowtime;
