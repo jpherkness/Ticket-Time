@@ -115,6 +115,7 @@ var updateShowtimes = () => {
                 0, 
                 0);
               showtimeDate.setMinutes(showtimeDate.getMinutes() - showtimeDate.getTimezoneOffset());
+              showtimeDate.setHours(showtimeDate + 5) // Offset to place in EST.
               insertShowtimeIntoDatabase(row.movie_id, showtimeDate);
             }
           }
