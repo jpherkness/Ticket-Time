@@ -31,7 +31,7 @@ import * as io from 'socket.io-client';
         </select>
         <div class='movie-showtimes-wrapper'>
           <button *ngFor='let showtime of groupedShowtimes[selectedDay]' class='showtime' (click)='clickShowtime(showtime)'>
-            {{showtime.time}}: {{showtime.time | date : 'shortTime' : 'UTC'}}
+            {{getLocalDateFromUTCDate(showtime.time) | date: 'shortTime'}}
           </button>
         </div>
       </div>
@@ -129,6 +129,15 @@ export class MovieDetail{
       var UTCDate = new Date(date);
       UTCDate.setMinutes(date.getMinutes() + date.getTimezoneOffset());
       return UTCDate;
+    }
+
+    /*
+     * Converts a date in UTC to the same date in local time.
+     */
+    private getLocalDateFromUTCDate(date: Date): Date {
+      var localDate = new Date(date);
+      localDate.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+      return localDate;
     }
     
     /*
