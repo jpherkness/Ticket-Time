@@ -7,6 +7,7 @@ var pool = mysql.createPool({
     'password': '2be9ecbb',
     'database': 'heroku_dd803884342ea93',
     'waitForConnections': true,
+    'timezone': 'utc'
 });
 
 var createReservation = (reservation, done) => {
