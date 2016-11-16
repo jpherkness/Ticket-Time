@@ -60,13 +60,10 @@ export class MovieDetail {
   ) {
     this.socket = io();
 
-    this.socket.on('reservation', (res: any) => {
+    this.socket.on('showtime', (res: any) => {
       for (let i in this.showtimes) {
-        if (this.showtimes[i].showtime_id == res.reservation.showtime_id) {
-          this.apiService.getShowtime(res.reservation.showtime_id)
-            .subscribe(showtime => {
-              this.showtimes[i] = showtime;
-            });
+        if (this.showtimes[i].showtime_id == res.showtime.showtime_id) {
+          this.showtimes[i] = res.showtime;
         }
       }
     });

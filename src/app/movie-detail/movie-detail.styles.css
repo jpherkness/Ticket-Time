@@ -62,6 +62,6 @@ select:focus {
 }
 
 .disabled {
-  background: gray;
+  background: #cedce3;
   pointer-events: none;
 }

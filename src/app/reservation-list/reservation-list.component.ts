@@ -31,9 +31,9 @@ export class ReservationList {
       this.socket = io();
 
       this.socket.on('reservation', (res: any) => {
-        if (res.status == 'created') {
+        if (res.event == 'created') {
           this.reservations.push(res.reservation);
-        } else if (res.status == 'deleted') {
+        } else if (res.event == 'deleted') {
           this.reservations = this.reservations
         .filter((r) => r.reservation_id != res.reservation.reservation_id);
         }

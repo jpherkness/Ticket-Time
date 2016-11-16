@@ -47,7 +47,7 @@ export class ReservationItem {
     
     ngOnInit() {
       this.socket.on('reservation', (res: any) => {
-        if (res.status == 'updated') {
+        if (res.event == 'updated') {
           if (this.reservation.reservation_id == res.reservation.reservation_id) {
             this.reservation = res.reservation;
           }
