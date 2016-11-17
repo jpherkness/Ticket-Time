@@ -237,28 +237,26 @@ router.post('/reservation', (req, res, next) => {
     // Potential validation?
 
     // Perform query
-    currentCapacity(showtime_id, (capacity) => {
-        maximumCapacity(showtime_id, (max_capacity) => {
-            if (max_capacity - capacity >= quantity) {
-                // Okay they didn't request too many tickets
-                db.query(`
-						INSERT INTO reservation (user_id, showtime_id, quantity)
-						VALUE (${user_id}, ${showtime_id}, ${quantity})`,
-                    (err, rows, fields) => {
-
-                        if (err) throw err;
-                        res.send({
-                            success: true,
-                            message: 'Successfully created'
-                        });
+    db.getShowtime(showtime_id, (showtime) => {
+        console.log(showtime);
+        if (showtime.max_capacity - showtime.current_capacity >= quantity) {
+            // Okay they didn't request too many tickets
+            db.query(`
+                INSERT INTO reservation (user_id, showtime_id, quantity)
+                VALUE (${user_id}, ${showtime_id}, ${quantity})`,
+                (err, rows, fields) => {
+                    if (err) throw err;
+                    res.send({
+                        success: true,
+                        message: 'Successfully created'
                     });
-            } else {
-                res.send({
-                    success: false,
-                    message: 'Exceeds capacity'
                 });
-            }
-        });
+        } else {
+            res.send({
+                success: false,
+                message: 'Exceeds capacity'
+            });
+        }
     });
 });
 

@@ -53,7 +53,7 @@ export class ReservationItem {
           }
         }
       });
-
+      
       this.loadShowtime(this.reservation.showtime_id, function() {
           this.loadMovie(this.showtime.movie_id);
       }.bind(this));
@@ -81,14 +81,14 @@ export class ReservationItem {
     }
     
     private incrementClicked(event: any) {
-      var newReservation = this.reservation;
+      var newReservation = (JSON.parse(JSON.stringify(this.reservation)));
       newReservation.quantity += 1;
       this.socket.emit('reservation:update', newReservation);
     }
     
     private decrementClicked(event: any) {
       if (this.reservation.quantity > 1) {
-        var newReservation = this.reservation;
+        var newReservation = (JSON.parse(JSON.stringify(this.reservation)));
         newReservation.quantity -= 1;
         this.socket.emit('reservation:update', newReservation);
       }

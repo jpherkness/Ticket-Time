@@ -18,10 +18,10 @@ io.on('connection', (socket) => {
 
     // Create a reservation
     socket.on('reservation:create', (reservation) => {
-        db.createReservation(reservation, (err, reservation) => {
+        db.createReservation(reservation, (err, createdReservation) => {
             if (err) throw err;
-            io.emit('reservation', {"event": "created", "reservation": reservation});
-            db.getShowtime(reservation.showtime_id, (showtime) => {
+            io.emit('reservation', {"event": "created", "reservation": createdReservation});
+            db.getShowtime(createdReservation.showtime_id, (showtime) => {
                 io.emit('showtime', {"event": "updated", "showtime": showtime});
             });
         });
@@ -29,21 +29,21 @@ io.on('connection', (socket) => {
 
     // Delete a reservation
     socket.on('reservation:delete', (reservation) => {
-        db.deleteReservation(reservation, (err, reservation) => {
+        db.deleteReservation(reservation, (err, deletedReservation) => {
             if (err) throw err;
-            io.emit('reservation', {"event": "deleted", "reservation": reservation});
-            db.getShowtime(reservation.showtime_id, (showtime) => {
+            io.emit('reservation', {"event": "deleted", "reservation": deletedReservation});
+            db.getShowtime(deletedReservation.showtime_id, (showtime) => {
                 io.emit('showtime', {"event": "updated", "showtime": showtime});
             });
-        })
+        });
     });
 
     // Update a reservation
     socket.on('reservation:update', (reservation) => {
-        db.updateReservation(reservation, (err, res) => {
+        db.updateReservation(reservation, (err, updatedReservation) => {
             if (err) throw err;
-            io.emit('reservation', {"event": "updated", "reservation": reservation});
-            db.getShowtime(reservation.showtime_id, (showtime) => {
+            io.emit('reservation', {"event": "updated", "reservation": updatedReservation});
+            db.getShowtime(updatedReservation.showtime_id, (showtime) => {
                 io.emit('showtime', {"event": "updated", "showtime": showtime});
             });
         });

@@ -19,22 +19,28 @@ var createReservation = (reservation, done) => {
     // Check to make sure these properties are okay
     if (!user_id || !showtime_id || !quantity) return;
 
-    // Perform operation
-    pool.query(`
-        INSERT INTO reservation (user_id, showtime_id, quantity)
-        VALUE (${user_id}, ${showtime_id}, ${quantity});`,
-        (err, results) => {
-            if (err) done(err, null);
-            if (results.insertId) {
-                pool.query(`
-                  SELECT * FROM reservation
-                  WHERE reservation_id=${results.insertId}`,
-                    (err, rows, fields) => {
-                        if (err) done(err, null);
-                        if (rows.length > 0) done(null, rows[0]);
-                    });
-            }
-        });
+    pool.getShowtime(showtime_id, (showtime) => {
+        if (showtime.max_capacity - showtime.current_capacity >= quantity) {
+            // Okay they didn't request too many tickets
+            pool.query(`
+                INSERT INTO reservation (user_id, showtime_id, quantity)
+                VALUE (${user_id}, ${showtime_id}, ${quantity})`,
+                (err, results) => {
+                    if (err) done(err, null);
+                    if (results.insertId) {
+                        pool.query(`
+                            SELECT * FROM reservation
+                            WHERE reservation_id=${results.insertId}`,
+                            (err, rows, fields) => {
+                                if (err) done(err, null);
+                                if (rows.length > 0) done(null, rows[0]);
+                            });
+                    }
+                });
+        } else {
+            done(null, null);
+        }
+    });
 };
 
 var deleteReservation = (reservation, done) => {
@@ -76,7 +82,7 @@ var updateReservation = (reservation, done) => {
 var getShowtime = (showtime_id, done) => {
     if (showtime_id == null) return;
     pool.query(`
-        SELECT *, (SELECT SUM(quantity)
+        SELECT *, (SELECT COALESCE(SUM(quantity), 0)
         FROM reservation AS R
         WHERE R.showtime_id=S.showtime_id) as current_capacity
         FROM showtime AS S
