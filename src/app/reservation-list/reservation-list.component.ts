@@ -32,7 +32,10 @@ export class ReservationList {
 
       this.socket.on('reservation', (res: any) => {
         if (res.event == 'created') {
-          this.reservations.push(res.reservation);
+          // If the reservation belongs to the current user, add it
+          if (res.reservation.user_id == this.authService.getCurrentUserId()) {
+            this.reservations.push(res.reservation);
+          }
         } else if (res.event == 'deleted') {
           this.reservations = this.reservations
         .filter((r) => r.reservation_id != res.reservation.reservation_id);

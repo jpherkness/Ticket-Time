@@ -112,16 +112,14 @@ export class MovieDetail {
 
   // Possibly move over to api?
   private clickShowtime(showtime: any) {
-    this.authService.getCurrentUser()
-      .subscribe(currentUser => {
-        if (!currentUser) return
-        var reservation = {
-          user_id: currentUser.user_id,
-          showtime_id: showtime.showtime_id,
-          quantity: 1
-        }
-        this.socket.emit('reservation:create', reservation);
-      });
+    let currentUserId = this.authService.getCurrentUserId()
+    if (!currentUserId) return
+    var newReservation = {
+      user_id: currentUserId,
+      showtime_id: showtime.showtime_id,
+      quantity: 1
+    }
+    this.socket.emit('reservation:create', newReservation);
   }
 
   private clickBack(event: Event) {
