@@ -2,7 +2,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Injectable, Inject } from '@angular/core';
 
-import { Movie, Showtime, Reservation } from '../models/models';
+import { Movie, Showtime, Reservation, Credit, Person } from '../models/models';
 
 @Injectable()
 export class ApiService {
@@ -39,6 +39,24 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/showtime/?showtime_id=${showtimeId}`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
+  }
+
+  /*
+   * Returns a dictionary of Credit objects, indexed by crewMembers and castMembers.
+   */
+  getCredits(movieId: number): Observable<Dict<Credit>> {
+    return this.http.get(`${this.baseUrl}/credits/?movie_id=${movieId}`)
+      .map(res => this.extractData(res))
+      .catch(err => this.handleError(err)) 
+  }
+
+  /*
+   * Returns a person, provided the id of the person.
+   */
+  getPerson(personId: number): Observable<Person> {
+    return this.http.get(`${this.baseUrl}/person/${personId}`)
+      .map(res => this.extractData(res))
+      .catch(err => this.handleError(err)) 
   }
      
   private extractData(res: Response) {
