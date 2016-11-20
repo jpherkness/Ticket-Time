@@ -15,7 +15,7 @@ export class ApiService {
       .catch(err => this.handleError(err))
   }
     
-  getMovie(id:number): Observable<Object[]> {
+  getMovie(id: number): Observable<Object[]> {
     return this.http.get(`${this.baseUrl}/movie/${id}`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))

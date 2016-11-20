@@ -44,13 +44,12 @@ export class ReservationList {
     }
     
     ngOnInit() {
-      this.authService.getCurrentUser()
-      .subscribe( currentUser => {
-        if (!currentUser) return;
-        this.apiService.getReservations(currentUser.user_id)
-        .subscribe( reservations => {
+      let currentUserId = +this.authService.getCurrentUserId()
+      if (currentUserId) {
+        this.apiService.getReservations(currentUserId)
+          .subscribe( reservations => {
           this.reservations = reservations;
         })
-      })
+      }
     }
 }
