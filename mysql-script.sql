@@ -63,6 +63,6 @@ CREATE TABLE `credit` (
 
 CREATE TABLE `cast_member` (
   `credit_id` int(11) DEFAULT NULL,
-  `character` varchar(100) DEFAULT NULL,
+  `role` varchar(100) DEFAULT NULL,
   KEY `pk,fk` (`credit_id`)
 );
