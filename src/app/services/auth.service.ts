@@ -11,7 +11,7 @@ export class AuthService {
   constructor(private router: Router,
               private http: Http){}
   
-  // TODO: Refactor this.
+  // TODO: Refactor this. This should not be a get request...
   public login(email: string, password: string) {
     this.http.get(`${this.baseUrl}/auth/?email=${email}&password=${password}`)
       .subscribe(
@@ -29,33 +29,48 @@ export class AuthService {
         }
       );
   }
+
+  // TODO: Turn this into a callback that sends res
+  public signup(user: any){
+    this.http.post(`${this.baseUrl}/user`, user)
+      .subscribe(
+        res => {
+          var body = this.extractData(res);
+          var user = body.user;
+          if (user.user_id) {
+            localStorage.setItem('auth_user_id', user.user_id);
+            this.router.navigate(['/home']);
+          }
+        },
+        err => {
+          console.log('Sign Up Error')
+        }
+      );
+  }
      
   public logout() {
     localStorage.removeItem('auth_user_id');
   }
   
   public isLoggedIn() {
-    return localStorage.getItem('auth_user_id') != null;
+    return this.getCurrentUserId() != null;
   }
   
-  public getCurrentUser(): Observable<Object> {
-    if (this.isLoggedIn()) {
-      let id = this.getCurrentUserId();
-      return this.http.get(`${this.baseUrl}/user/${id}`)
+  // Returns the current users id
+  public getCurrentUserId(): string {
+    let userId = localStorage.getItem('auth_user_id');
+    return userId
+  }
+
+  // Returns the current user
+  public getCurrentUser(): Observable<any> {
+    let userId = this.getCurrentUserId()
+    if (!userId) return Observable.empty()
+    return this.http.get(`${this.baseUrl}/user/${userId}`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err)) 
-    }
-    return Observable.empty();
   }
-  
-  private getCurrentUserId(): string {
-    if (this.isLoggedIn()) {
-      let id = localStorage.getItem('auth_user_id');
-      return id;
-    }
-    return null;
-  }
-  
+ 
   private extractData(res: Response) {
     let body = res.json();
     return body || { };

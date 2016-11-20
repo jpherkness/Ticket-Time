@@ -16,14 +16,15 @@ import * as io from 'socket.io-client';
         'background-position':'center', 
         'background-size':'cover'}" (click)='headerClicked($event)'>
         <div *ngIf='movie' class='title'>{{movie.title}}</div>
-        <span *ngIf='showtime' class='date'>{{showtime.time.replace('T', ' ').replace('Z', '') | date: 'EEEE, MMMM d'}}</span>
-        <span *ngIf='showtime' class='time'>{{showtime.time.replace('T', ' ').replace('Z', '') | date: 'h:m a'}}</span>
+        <span *ngIf='showtime' class='date'>{{showtime.time | date: 'EEEE, MMMM d' : 'UTC'}}</span>
+        <span *ngIf='showtime' class='time'>{{showtime.time | date:'h:mm a' : 'UTC'}}</span>
       </div>
       <div class='reservation-sub'>Admit</div>
       <div>
-        <button class='reservation-button' (click)='decrementClicked($event)'>-</button>
+        <button class='reservation-button' (click)='decrementClicked($event)'><i class="fa fa-minus"></i></button>
         <span class='reservation-quantity'>{{reservation.quantity}}</span>
-        <button class='reservation-button' (click)='incrementClicked($event)'>+</button>
+        <button class='reservation-button' (click)='incrementClicked($event)'><i class="fa fa-plus"></i></button>
+        <button class='reservation-button delete-button' (click)='deleteClicked($event)'><i class="fa fa-close"></i></button>
       </div>
     </div>
     `,
@@ -33,10 +34,10 @@ import * as io from 'socket.io-client';
 export class ReservationItem {
   
     @Input() reservation: any;
+    @Input() socket: any;
     
     showtime: any;
     movie: any;
-    socket: any;
     
     constructor (public apiService: ApiService,
                  public authService: AuthService,
@@ -45,12 +46,14 @@ export class ReservationItem {
     }
     
     ngOnInit() {
-      this.socket = io();
-      this.socket.on('reservation:updated', (reservation: any) => {
-        if (this.reservation.reservation_id == reservation.reservation_id) {
-          this.reservation = reservation;
+      this.socket.on('reservation', (res: any) => {
+        if (res.event == 'updated') {
+          if (this.reservation.reservation_id == res.reservation.reservation_id) {
+            this.reservation = res.reservation;
+          }
         }
       });
+      
       this.loadShowtime(this.reservation.showtime_id, function() {
           this.loadMovie(this.showtime.movie_id);
       }.bind(this));
@@ -78,16 +81,20 @@ export class ReservationItem {
     }
     
     private incrementClicked(event: any) {
-      var newReservation = this.reservation;
+      var newReservation = (JSON.parse(JSON.stringify(this.reservation)));
       newReservation.quantity += 1;
       this.socket.emit('reservation:update', newReservation);
     }
     
     private decrementClicked(event: any) {
       if (this.reservation.quantity > 1) {
-        var newReservation = this.reservation;
+        var newReservation = (JSON.parse(JSON.stringify(this.reservation)));
         newReservation.quantity -= 1;
         this.socket.emit('reservation:update', newReservation);
       }
+    }
+
+    private deleteClicked(event: Event) {
+      this.socket.emit('reservation:delete', this.reservation);
     }
 }

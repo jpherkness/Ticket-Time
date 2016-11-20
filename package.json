@@ -6,8 +6,8 @@
   "author": "Joseph Herkness, Joshua Herkness",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"gulp\" \"node server.js\"",
-    "postinstall": "typings install"
+    "start": "node server.js",
+    "postinstall": "typings install && gulp production"
   },
   "dependencies": {
     "@angular/common": "~2.1.2",
@@ -19,6 +19,8 @@
     "@angular/platform-browser-dynamic": "~2.1.2",
     "@angular/router": "~3.1.2",
     "@angular/upgrade": "~2.1.2",
+    "@types/node": "^6.0.46",
+    "@types/socket.io-client": "^1.4.28",
     "angular-in-memory-web-api": "~0.1.1",
     "body-parser": "^1.15.2",
     "bootstrap": "^3.3.7",
@@ -44,8 +46,6 @@
     "zone.js": "^0.6.25"
   },
   "devDependencies": {
-    "@types/core-js": "^0.9.34",
-    "@types/node": "^6.0.45",
     "typescript": "^2.0.3",
     "rimraf": "^2.5.4"
   },

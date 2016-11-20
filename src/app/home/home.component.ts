@@ -48,7 +48,7 @@ export class Home {
       this.router.navigate(['/login']);
     }
     
-    navigateHome(event) {
+    navigateHome(event: Event) {
       this.router.navigate(['/']);
     }
     

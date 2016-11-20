@@ -35,9 +35,14 @@ export class SignUp {
   constructor (private authService: AuthService,
               private router: Router){ }
   
-  // Create user in backend
+  // Create user
   submit() {
-    // TODO: Create user
+    this.authService.signup({
+      "first_name": this.firstName,
+      "last_name": this.lastName,
+      "email": this.email,
+      "password": this.password
+    });
   }
   
   // Route the user to the login page.

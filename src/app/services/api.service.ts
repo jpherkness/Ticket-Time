@@ -33,14 +33,13 @@ export class ApiService {
       .catch(err => this.handleError(err))
   }
   
-  getShowtime(showtimeId: number): Observable<Object[]> {
+  getShowtime(showtimeId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/showtime/?showtime_id=${showtimeId}`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
   }
      
   private extractData(res: Response) {
-    console.log(res);
     let body = res.json();
     return body || { };
   }

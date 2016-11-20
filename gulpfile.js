@@ -36,8 +36,10 @@ gulp.task('copy', () => {
 // Browser Sync
 gulp.task('browser-sync', () => {
     browserSync.init({
-        server: './',
-        port: 8080,
+        proxy: {
+            target: "localhost:8080",
+            ws: true
+        },
         notify: true,
         browser: "google chrome"
     });
@@ -49,3 +51,4 @@ gulp.task('reload', () => {
 });
 
 gulp.task('default', ['clean', 'compile', 'copy', 'watch', 'browser-sync']);
+gulp.task('production', ['clean', 'compile', 'copy']);
