@@ -28,7 +28,7 @@ import { Movie, Showtime, CrewMember, CastMember } from '../models/models';
         <p> Runtime: {{ movie.runtime }} min </p>
         <h3> Cast Members</h3>
         <ul>
-          <li *ngFor='let member of castMembers'>{{member.name}} : {{member.character}}</li>
+          <li *ngFor='let member of castMembers'>{{member.name}} : {{member.role}}</li>
         </ul>
         <h3> Crew Members</h3>
         <ul>

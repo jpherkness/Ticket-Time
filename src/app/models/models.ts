@@ -45,5 +45,5 @@ export class CrewMember extends Credit {
 }
 
 export class CastMember extends Credit {
-    character: string;
+    role: string;
 }
