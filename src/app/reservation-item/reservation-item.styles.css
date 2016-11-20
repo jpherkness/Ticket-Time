@@ -68,6 +68,10 @@
   color: #6cb5f3;
 }
 
+.disabled {
+  pointer-events: none;
+}
+
 .delete-button:hover{
   border: 2px solid #ff4747;
   color: #ff4747;

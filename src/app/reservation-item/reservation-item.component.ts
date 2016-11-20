@@ -23,8 +23,13 @@ import * as io from 'socket.io-client';
       <div>
         <button class='reservation-button' (click)='decrementClicked($event)'><i class="fa fa-minus"></i></button>
         <span class='reservation-quantity'>{{reservation.quantity}}</span>
-        <button class='reservation-button' (click)='incrementClicked($event)'><i class="fa fa-plus"></i></button>
-        <button class='reservation-button delete-button' (click)='deleteClicked($event)'><i class="fa fa-close"></i></button>
+        <button class='reservation-button' (click)='incrementClicked($event)' 
+          [ngClass]="showtime.current_capacity < showtime.max_capacity ? 'enabled' : 'disabled'">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button class='reservation-button delete-button' (click)='deleteClicked($event)'>
+          <i class="fa fa-close"></i>
+        </button>
       </div>
     </div>
     `,
@@ -38,6 +43,7 @@ export class ReservationItem {
     
     showtime: any;
     movie: any;
+    wfr: boolean; // keep track of if we are waiting for a reservation or not
     
     constructor (public apiService: ApiService,
                  public authService: AuthService,
@@ -46,10 +52,20 @@ export class ReservationItem {
     }
     
     ngOnInit() {
+      this.wfr = false;
       this.socket.on('reservation', (res: any) => {
         if (res.event == 'updated') {
           if (this.reservation.reservation_id == res.reservation.reservation_id) {
             this.reservation = res.reservation;
+          }
+        }
+      });
+
+      this.socket.on('showtime', (res: any) => {
+        if (res.event == 'updated') {
+          if (this.reservation.showtime_id == res.showtime.showtime_id) {
+            this.showtime = res.showtime;
+            this.wfr = false; //When we get the showtime, stop waiting
           }
         }
       });
@@ -81,9 +97,11 @@ export class ReservationItem {
     }
     
     private incrementClicked(event: any) {
+      if (this.wfr) return;
       var newReservation = (JSON.parse(JSON.stringify(this.reservation)));
       newReservation.quantity += 1;
       this.socket.emit('reservation:update', newReservation);
+      this.wfr = true;
     }
     
     private decrementClicked(event: any) {
