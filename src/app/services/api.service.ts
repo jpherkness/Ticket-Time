@@ -51,7 +51,7 @@ export class ApiService {
   }
 
   /*
-   * Returns a dictionary of Credit objects, indexed by crewMembers and castMembers.
+   * Returns a list of Credit objects, indexed by crewMembers and castMembers.
    */
   getCrewMembers(movieId: number): Observable<Array<CrewMember>> {
     return this.http.get(`${this.baseUrl}/crew/?movie_id=${movieId}`)
@@ -60,7 +60,7 @@ export class ApiService {
   }
 
   /*
-   * Returns a dictionary of Credit objects, indexed by crewMembers and castMembers.
+   * Returns a list of Credit objects, indexed by crewMembers and castMembers.
    */
   getCredits(movieId: number): Observable<Dict<Credit>> {
     return this.http.get(`${this.baseUrl}/credits/?movie_id=${movieId}`)

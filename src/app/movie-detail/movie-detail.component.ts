@@ -9,7 +9,7 @@ import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
 // Models
-import { Movie, Showtime } from '../models/models';
+import { Movie, Showtime, CrewMember, CastMember } from '../models/models';
 
 @Component({
   moduleId: module.id,
@@ -26,6 +26,14 @@ import { Movie, Showtime } from '../models/models';
         <p> {{ movie.description }} </p>
         <p> Rating: {{ movie.rating }} / 10 </p>
         <p> Runtime: {{ movie.runtime }} min </p>
+        <h3> Cast Members</h3>
+        <ul>
+          <li *ngFor='let member of castMembers'>{{member.name}} : {{member.character}}</li>
+        </ul>
+        <h3> Crew Members</h3>
+        <ul>
+          <li *ngFor='let member of crewMembers'>{{member.name}} : {{member.job}}</li>
+        </ul>
         
         <h2 class="header"> Showtimes </h2>
         <select [(ngModel)]="selectedDay" class='date-selector'>
@@ -60,10 +68,9 @@ export class MovieDetail {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
-  ) {
-    this.socket = io();
+    private location: Location){
 
+    this.socket = io();
     this.socket.on('showtime', (res: any) => {
       for (let i in this.showtimes) {
         if (this.showtimes[i].showtime_id == res.showtime.showtime_id) {
@@ -90,6 +97,30 @@ export class MovieDetail {
           this.selectedDay = this.getShowtimeDates()[0];
         });
     });
+  }
+
+  /*
+   * Returns a list of crew members for the movie.
+   */
+  get crewMembers(): Array<CrewMember> {
+    var crewMembers: Array<CrewMember> = [];
+    this.apiService.getCrewMembers(this.movie.movie_id)
+      .subscribe(crew => {
+        crewMembers = crew;
+      });
+    return crewMembers;
+  }
+
+  /*
+   * Returns a list of cast members for the movie.
+   */
+  get castMembers(): Array<CastMember> {
+    var castMembers: Array<CastMember> = [];
+    this.apiService.getCastMembers(this.movie.movie_id)
+      .subscribe(cast => {
+        castMembers = cast;
+      });
+    return castMembers;
   }
 
   get groupedShowtimes(): Dict<Showtime> {
