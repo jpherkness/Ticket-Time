@@ -23,3 +23,34 @@ export class Showtime {
     max_capacity: number;
     current_capacity?: number;
 }
+
+export class User {
+    user_id: number;
+    first_name: string;
+    last_name: string;
+    password: string;
+    email: string;
+}
+
+export class Credit {
+    credit_id: number;
+    movie_id: number;
+    person_id: number;
+    is_crew_member: Boolean;
+    is_cast_member: Boolean;
+}
+
+export class Person {
+    person_id: number;
+    name: string;
+    date_of_birth: string;
+    profile_url?: string;
+}
+
+export class CrewMember extends Credit {
+    job: string;
+}
+
+export class CastMember extends Credit {
+    character: string;
+}

@@ -16,7 +16,7 @@ export class ApiService {
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
   }
-    
+  
   getMovie(id: number): Observable<Movie> {
     return this.http.get(`${this.baseUrl}/movie/${id}`)
       .map(res => this.extractData(res))
