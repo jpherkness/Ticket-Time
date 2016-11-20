@@ -30,8 +30,8 @@ import * as io from 'socket.io-client';
           </option>
         </select>
 
-        <div class='movie-showtimes-wrapper' [ngClass]="!authService.isLoggedIn() ? 'disabled' : 'enabled'" >
-          <button *ngFor='let showtime of groupedShowtimes[selectedDay]' class='showtime' (click)='clickShowtime(showtime)' [ngClass]="showtime.current_capacity < showtime.max_capacity ? 'enabled' : 'disabled'">
+        <div class='movie-showtimes-wrapper'>
+          <button *ngFor='let showtime of groupedShowtimes[selectedDay]' class='showtime' (click)='clickShowtime(showtime)' [ngClass]="showtime.current_capacity < showtime.max_capacity && authService.isLoggedIn() ? 'enabled' : 'disabled'">
             {{showtime.time | date: 'shortTime'}}
           </button>
         </div>
