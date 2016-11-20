@@ -35,16 +35,9 @@ export class User {
 export class Credit {
     credit_id: number;
     movie_id: number;
-    person_id: number;
+    name: string;
     is_crew_member: Boolean;
     is_cast_member: Boolean;
-}
-
-export class Person {
-    person_id: number;
-    name: string;
-    date_of_birth: string;
-    profile_url?: string;
 }
 
 export class CrewMember extends Credit {
