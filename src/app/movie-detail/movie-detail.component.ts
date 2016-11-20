@@ -26,14 +26,14 @@ import { Movie, Showtime, CrewMember, CastMember } from '../models/models';
         <p> {{ movie.description }} </p>
         <p> Rating: {{ movie.rating }} / 10 </p>
         <p> Runtime: {{ movie.runtime }} min </p>
-        <h3> Cast Members</h3>
-        <ul>
-          <li *ngFor='let member of castMembers'>{{member.name}} : {{member.role}}</li>
-        </ul>
-        <h3> Crew Members</h3>
-        <ul>
-          <li *ngFor='let member of crewMembers'>{{member.name}} : {{member.job}}</li>
-        </ul>
+        <div class='header'> Crew Members </div>
+        <p>
+          <span *ngFor='let crewMember of crewMembers, let isLast = last'><b>{{crewMember.name}}:</b> {{crewMember.job}} {{isLast ? '' : ','}}</span>
+        </p>
+        <div class='header'> Cast Members</div> 
+        <p>
+          <span *ngFor='let castMember of castMembers, let isLast = last'><b>{{castMember.name}}:</b> {{castMember.role}}{{isLast ? '' : ','}}</span>
+        </p>    
         
         <h2 class="header"> Showtimes </h2>
         <select [(ngModel)]="selectedDay" class='date-selector'>
@@ -58,17 +58,19 @@ import { Movie, Showtime, CrewMember, CastMember } from '../models/models';
 })
 export class MovieDetail {
 
-  movie: Movie;
-  showtimes: Array<Showtime> = [];
-  selectedDay: string;
-  socket: any;
+  private movie: Movie;
+  private showtimes: Array<Showtime> = [];
+  private castMembers: Array<CastMember> = [];
+  private crewMembers: Array<CrewMember> = [];
+  private selectedDay: string;
+  private socket: any;
 
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location){
+    private location: Location) {
 
     this.socket = io();
     this.socket.on('showtime', (res: any) => {
@@ -82,45 +84,39 @@ export class MovieDetail {
 
   ngOnInit() {
     this.route.params.forEach((params: Params) => {
+
       let id = +params['id'];
+      
+      // Retrieve the movie information from the database.
       this.apiService.getMovie(id)
-        .subscribe(movie => this.movie = movie);
+        .subscribe((movie: Movie) => {
+          this.movie = movie
+        });
 
       let now = new Date()
       let nowUTC = new Date(now.toString() + 'UTC')
       let range = this.getDateTimeStringRangeFromDate(nowUTC, 7 * 24 * 60 * 60 * 1000);
 
+      // Retrieve the showtimes from the database.
       this.apiService.getShowtimes(id, range.start, range.end)
         .subscribe(showtimes => {
           this.showtimes = showtimes;
-          //this.groupedShowtimes = this.groupShowtimes(showtimes);
           this.selectedDay = this.getShowtimeDates()[0];
         });
+      
+      // Retrieve the crew members from the database.
+      this.apiService.getCrewMembers(id)
+        .subscribe((crewMembers: Array<CrewMember>) => {
+          this.crewMembers = crewMembers;
+        });
+      
+      // Retrieve the case members from the database.
+      this.apiService.getCastMembers(id)
+        .subscribe((castMembers: Array<CastMember>) => {
+          console.log(castMembers);
+          this.castMembers = castMembers;
+        });
     });
-  }
-
-  /*
-   * Returns a list of crew members for the movie.
-   */
-  get crewMembers(): Array<CrewMember> {
-    var crewMembers: Array<CrewMember> = [];
-    this.apiService.getCrewMembers(this.movie.movie_id)
-      .subscribe(crew => {
-        crewMembers = crew;
-      });
-    return crewMembers;
-  }
-
-  /*
-   * Returns a list of cast members for the movie.
-   */
-  get castMembers(): Array<CastMember> {
-    var castMembers: Array<CastMember> = [];
-    this.apiService.getCastMembers(this.movie.movie_id)
-      .subscribe(cast => {
-        castMembers = cast;
-      });
-    return castMembers;
   }
 
   get groupedShowtimes(): Dict<Showtime> {

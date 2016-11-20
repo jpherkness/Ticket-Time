@@ -2,6 +2,8 @@
   display: flex;
   flex-flow: row;
   margin: 30px;
+
+  line-height: 1.5rem;
 }
 
 .movie-image-wrapper {
