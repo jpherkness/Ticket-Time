@@ -2,7 +2,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Injectable, Inject } from '@angular/core';
 
-import { Movie, Showtime, Reservation, Credit, Person } from '../models/models';
+import { Movie, Showtime, Reservation, Credit, CrewMember, CastMember } from '../models/models';
 
 @Injectable()
 export class ApiService {
@@ -42,6 +42,24 @@ export class ApiService {
   }
 
   /*
+   * Returns a list of crew members for a given movie id.
+   */
+  getCastMembers(movieId: number): Observable<Array<CastMember>> {
+    return this.http.get(`${this.baseUrl}/cast/?movie_id=${movieId}`)
+      .map(res => this.extractData(res))
+      .catch(err => this.handleError(err)) 
+  }
+
+  /*
+   * Returns a dictionary of Credit objects, indexed by crewMembers and castMembers.
+   */
+  getCrewMembers(movieId: number): Observable<Array<CrewMember>> {
+    return this.http.get(`${this.baseUrl}/crew/?movie_id=${movieId}`)
+      .map(res => this.extractData(res))
+      .catch(err => this.handleError(err)) 
+  }
+
+  /*
    * Returns a dictionary of Credit objects, indexed by crewMembers and castMembers.
    */
   getCredits(movieId: number): Observable<Dict<Credit>> {
@@ -50,15 +68,6 @@ export class ApiService {
       .catch(err => this.handleError(err)) 
   }
 
-  /*
-   * Returns a person, provided the id of the person.
-   */
-  getPerson(personId: number): Observable<Person> {
-    return this.http.get(`${this.baseUrl}/person/${personId}`)
-      .map(res => this.extractData(res))
-      .catch(err => this.handleError(err)) 
-  }
-     
   private extractData(res: Response) {
     let body = res.json();
     return body || { };
