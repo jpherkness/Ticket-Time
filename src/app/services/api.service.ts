@@ -2,6 +2,8 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Injectable, Inject } from '@angular/core';
 
+import { Movie, Showtime, Reservation } from '../models/models';
+
 @Injectable()
 export class ApiService {
   
@@ -9,31 +11,31 @@ export class ApiService {
   
   constructor (private http: Http){ } 
      
-  getMovies(): Observable<Object[]> {
+  getMovies(): Observable<Array<Movie>> {
     return this.http.get(`${this.baseUrl}/movie`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
   }
     
-  getMovie(id: number): Observable<Object[]> {
+  getMovie(id: number): Observable<Movie> {
     return this.http.get(`${this.baseUrl}/movie/${id}`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
   }
   
-  getShowtimes(movieId: number, startTime: string, endTime: string): Observable<Object[]> {
+  getShowtimes(movieId: number, startTime: string, endTime: string): Observable<Array<Showtime>> {
     return this.http.get(`${this.baseUrl}/showtimes/?movie_id=${movieId}&start_time=${startTime}&end_time=${endTime}`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
   }
   
-  getReservations(userId: number): Observable<Object[]> {
+  getReservations(userId: number): Observable<Array<Reservation>> {
     return this.http.get(`${this.baseUrl}/reservations/?user_id=${userId}`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))
   }
   
-  getShowtime(showtimeId: number): Observable<any> {
+  getShowtime(showtimeId: number): Observable<Showtime> {
     return this.http.get(`${this.baseUrl}/showtime/?showtime_id=${showtimeId}`)
       .map(res => this.extractData(res))
       .catch(err => this.handleError(err))

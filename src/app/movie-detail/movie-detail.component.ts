@@ -2,10 +2,14 @@ import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import * as io from 'socket.io-client';
+
+// Services
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
-import * as io from 'socket.io-client';
+// Models
+import { Movie, Showtime } from '../models/models';
 
 @Component({
   moduleId: module.id,
@@ -46,8 +50,8 @@ import * as io from 'socket.io-client';
 })
 export class MovieDetail {
 
-  movie: any;
-  showtimes: Array<any> = [];
+  movie: Movie;
+  showtimes: Array<Showtime> = [];
   selectedDay: string;
   socket: any;
 
@@ -88,7 +92,7 @@ export class MovieDetail {
     });
   }
 
-  get groupedShowtimes(): any {
+  get groupedShowtimes(): Dict<Showtime> {
     if (this.showtimes == null) return {};
     var groupedShowtimes = {};
     for (var showtime of this.showtimes) {
@@ -111,7 +115,7 @@ export class MovieDetail {
   }
 
   // Possibly move over to api?
-  private clickShowtime(showtime: any) {
+  private clickShowtime(showtime: Showtime) {
     let currentUserId = this.authService.getCurrentUserId()
     if (!currentUserId) return
     var newReservation = {

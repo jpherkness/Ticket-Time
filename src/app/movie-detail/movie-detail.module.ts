@@ -7,7 +7,7 @@ import { MovieDetail }  from './movie-detail.component';
 @NgModule({
   'imports': [ 
      BrowserModule,
-     FormsModule
+     FormsModule,
   ],
   'declarations': [ 
      MovieDetail

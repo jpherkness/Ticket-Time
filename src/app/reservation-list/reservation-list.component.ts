@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import * as io from 'socket.io-client';
+
+// Services
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
-import * as io from 'socket.io-client';
+// Models
+import { Reservation } from '../models/models';
 
 @Component({
     moduleId: module.id,
@@ -21,7 +25,7 @@ import * as io from 'socket.io-client';
 })
 export class ReservationList {
   
-    reservations: Array<any> = [];
+    reservations: Array<Reservation> = [];
     socket: any;
     
     constructor (public apiService: ApiService,

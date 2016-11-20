@@ -1,10 +1,14 @@
 import { Component, Input, HostListener } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import * as io from 'socket.io-client';
+
+// Services
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
-import * as io from 'socket.io-client';
+// Models
+import { Movie, Showtime, Reservation } from '../models/models'
 
 @Component({
     moduleId: module.id,
@@ -38,11 +42,11 @@ import * as io from 'socket.io-client';
 })
 export class ReservationItem {
   
-    @Input() reservation: any;
+    @Input() reservation: Reservation;
     @Input() socket: any;
     
-    showtime: any;
-    movie: any;
+    showtime: Showtime;
+    movie: Movie;
     wfr: boolean; // keep track of if we are waiting for a reservation or not
     
     constructor (public apiService: ApiService,
