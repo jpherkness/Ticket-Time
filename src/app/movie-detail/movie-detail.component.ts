@@ -2,10 +2,14 @@ import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import * as io from 'socket.io-client';
+
+// Services
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
-import * as io from 'socket.io-client';
+// Models
+import { Movie, Showtime, CrewMember, CastMember } from '../models/models';
 
 @Component({
   moduleId: module.id,
@@ -18,10 +22,18 @@ import * as io from 'socket.io-client';
       </div>
       <div class="movie-info-wrapper">
       
-        <h2 class="header"> {{ movie.title }} </h2>
+        <h1 class="header"> {{ movie.title }} </h1>
         <p> {{ movie.description }} </p>
         <p> Rating: {{ movie.rating }} / 10 </p>
         <p> Runtime: {{ movie.runtime }} min </p>
+        <h2 class='header'> Crew Members </h2>
+        <ul>
+          <li *ngFor='let crewMember of crewMembers'><b>{{crewMember.name}}:</b> {{crewMember.job}}</li>
+        </ul>
+        <h2 class='header'> Cast Members</h2> 
+        <ul>
+          <li *ngFor='let castMember of castMembers'><b>{{castMember.name}}:</b> {{castMember.role}}</li>
+        </ul>    
         
         <h2 class="header"> Showtimes </h2>
         <select [(ngModel)]="selectedDay" class='date-selector'>
@@ -46,20 +58,21 @@ import * as io from 'socket.io-client';
 })
 export class MovieDetail {
 
-  movie: any;
-  showtimes: Array<any> = [];
-  selectedDay: string;
-  socket: any;
+  private movie: Movie;
+  private showtimes: Array<Showtime> = [];
+  private castMembers: Array<CastMember> = [];
+  private crewMembers: Array<CrewMember> = [];
+  private selectedDay: string;
+  private socket: any;
 
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
-  ) {
-    this.socket = io();
+    private location: Location) {
 
+    this.socket = io();
     this.socket.on('showtime', (res: any) => {
       for (let i in this.showtimes) {
         if (this.showtimes[i].showtime_id == res.showtime.showtime_id) {
@@ -71,24 +84,42 @@ export class MovieDetail {
 
   ngOnInit() {
     this.route.params.forEach((params: Params) => {
+
       let id = +params['id'];
+      
+      // Retrieve the movie information from the database.
       this.apiService.getMovie(id)
-        .subscribe(movie => this.movie = movie);
+        .subscribe((movie: Movie) => {
+          this.movie = movie
+        });
 
       let now = new Date()
       let nowUTC = new Date(now.toString() + 'UTC')
       let range = this.getDateTimeStringRangeFromDate(nowUTC, 7 * 24 * 60 * 60 * 1000);
 
+      // Retrieve the showtimes from the database.
       this.apiService.getShowtimes(id, range.start, range.end)
         .subscribe(showtimes => {
           this.showtimes = showtimes;
-          //this.groupedShowtimes = this.groupShowtimes(showtimes);
           this.selectedDay = this.getShowtimeDates()[0];
+        });
+      
+      // Retrieve the crew members from the database.
+      this.apiService.getCrewMembers(id)
+        .subscribe((crewMembers: Array<CrewMember>) => {
+          this.crewMembers = crewMembers;
+        });
+      
+      // Retrieve the case members from the database.
+      this.apiService.getCastMembers(id)
+        .subscribe((castMembers: Array<CastMember>) => {
+          console.log(castMembers);
+          this.castMembers = castMembers;
         });
     });
   }
 
-  get groupedShowtimes(): any {
+  get groupedShowtimes(): Dict<Showtime> {
     if (this.showtimes == null) return {};
     var groupedShowtimes = {};
     for (var showtime of this.showtimes) {
@@ -111,7 +142,7 @@ export class MovieDetail {
   }
 
   // Possibly move over to api?
-  private clickShowtime(showtime: any) {
+  private clickShowtime(showtime: Showtime) {
     let currentUserId = this.authService.getCurrentUserId()
     if (!currentUserId) return
     var newReservation = {

@@ -1,13 +1,14 @@
 var mysql = require('mysql');
 
 var pool = mysql.createPool({
-    'connectionLimit': 10,
+    'connectionLimit': 5,
     'host': 'us-cdbr-iron-east-04.cleardb.net',
     'user': 'b7d1ee028b5ad9',
     'password': '2be9ecbb',
     'database': 'heroku_dd803884342ea93',
     'waitForConnections': true,
-    'timezone': 'utc'
+    'timezone': 'utc',
+    'multipleStatements': 'true'
 });
 
 var createReservation = (reservation, done) => {

@@ -14,20 +14,22 @@
 }
 
 .reservation-header {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: flex-end;
+  align-items: flex-start;
   flex: 1;
   padding: 10px;
-  text-align: center;
   height: 120px;
 }
 
 .reservation-header:hover {
   cursor: pointer;
-  /*background: #f7f7f7;*/
 }
 
 .reservation-header .title {
   font-weight: 600;
-  font-size: 25px;
+  font-size: 20px;
   margin-bottom: 10px;
   color: white;
 }
@@ -39,14 +41,13 @@
   font-style: bold;
 }
 
-.reservation-sub {
+.reservation-footer {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  
   flex: 0 0 100%;
-  text-align: center;
-  font-size: 14px;
-  margin: 5px 0;
-  color: black;
-  font-weight: 600;
-  text-transform: uppercase;
 }
 
 .reservation-button {

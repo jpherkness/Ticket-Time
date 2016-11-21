@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+// Services
 import { ApiService } from '../services/api.service';
+
+// Models
+import { Movie } from '../models/models';
 
 @Component({
     moduleId: module.id,
@@ -18,7 +22,7 @@ import { ApiService } from '../services/api.service';
 })
 export class MovieList {
 
-  movies: any;
+  movies: Array<Movie>;
   
   constructor (public apiService: ApiService,
                private route: ActivatedRoute,

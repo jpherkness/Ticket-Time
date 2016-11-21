@@ -1,10 +1,14 @@
 import { Component, Input, HostListener } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import * as io from 'socket.io-client';
+
+// Services
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
-import * as io from 'socket.io-client';
+// Models
+import { Movie, Showtime, Reservation } from '../models/models'
 
 @Component({
     moduleId: module.id,
@@ -12,21 +16,21 @@ import * as io from 'socket.io-client';
     template:`
     <div *ngIf='movie && showtime' class='reservation-wrapper'>
       <div class='reservation-header' [ngStyle]="{
-        'background': 'linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(' + movie.backdrop_url + ')', 
+        'background': 'linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) ), url(' + movie.backdrop_url + ')', 
         'background-position':'center', 
         'background-size':'cover'}" (click)='headerClicked($event)'>
         <div *ngIf='movie' class='title'>{{movie.title}}</div>
-        <span *ngIf='showtime' class='date'>{{showtime.time | date: 'EEEE, MMMM d' : 'UTC'}}</span>
-        <span *ngIf='showtime' class='time'>{{showtime.time | date:'h:mm a' : 'UTC'}}</span>
+        <span *ngIf='showtime' class='date'>{{showtime.time | date: 'MMM d, y h:mm a' : 'UTC'}}</span>
       </div>
-      <div class='reservation-sub'>Admit</div>
-      <div>
-        <button class='reservation-button' (click)='decrementClicked($event)'><i class="fa fa-minus"></i></button>
-        <span class='reservation-quantity'>{{reservation.quantity}}</span>
-        <button class='reservation-button' (click)='incrementClicked($event)' 
-          [ngClass]="showtime.current_capacity < showtime.max_capacity ? 'enabled' : 'disabled'">
-          <i class="fa fa-plus"></i>
-        </button>
+      <div class='reservation-footer'>
+        <div class='stepper'>
+          <button class='reservation-button' (click)='decrementClicked($event)'><i class="fa fa-minus"></i></button>
+          <span class='reservation-quantity'>{{reservation.quantity}}</span>
+          <button class='reservation-button' (click)='incrementClicked($event)' 
+            [ngClass]="showtime.current_capacity < showtime.max_capacity ? 'enabled' : 'disabled'">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
         <button class='reservation-button delete-button' (click)='deleteClicked($event)'>
           <i class="fa fa-close"></i>
         </button>
@@ -38,11 +42,11 @@ import * as io from 'socket.io-client';
 })
 export class ReservationItem {
   
-    @Input() reservation: any;
+    @Input() reservation: Reservation;
     @Input() socket: any;
     
-    showtime: any;
-    movie: any;
+    showtime: Showtime;
+    movie: Movie;
     wfr: boolean; // keep track of if we are waiting for a reservation or not
     
     constructor (public apiService: ApiService,

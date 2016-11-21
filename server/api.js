@@ -157,6 +157,72 @@ router.get('/movie/:id', (req, res, next) => {
 });
 
 // ============================================================================
+// Return a list of crew members for a movie, given the movie id.
+// ============================================================================
+
+router.get('/crew', (req, res, next) => {
+
+    // Read params
+    var movie_id = req.query.movie_id;
+
+    db.query(`
+			SELECT * FROM credit
+            NATURAL JOIN
+            crew_member
+            WHERE is_crew_member=true 
+            AND movie_id=${movie_id}`,
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            // Return crew memebrs
+            res.send(rows);
+        });
+});
+
+// ============================================================================
+// Return a list of cast members for a movie, given the movie id.
+// ============================================================================
+
+router.get('/cast', (req, res, next) => {
+
+    // Read params
+    var movie_id = req.query.movie_id;
+
+    db.query(`
+			SELECT * FROM credit
+            NATURAL JOIN
+            cast_member
+            WHERE is_cast_member=true
+            AND movie_id=${movie_id}`,
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            // Return cast memebrs
+            res.send(rows);
+        });
+});
+
+// ============================================================================
+// Return a list of credits for a movie, given the movie id.
+// ============================================================================
+
+router.get('/credits', (req, res, next) => {
+
+    // Read params
+    var movie_id = req.query.movie_id;
+
+    db.query(`
+            SELECT * FROM credit
+            WHERE movie_id=${movie_id}`,
+        (err, rows, fields) => {
+
+            if (err) throw err;
+            // Return crew memebrs
+            res.send(rows);
+        });
+});
+
+// ============================================================================
 // Return a list of showtimes for a movie between two times
 // Params: movie_id, start_time, end_time
 // ============================================================================
@@ -350,6 +416,20 @@ router.post('/import', (req, res, next) => {
 router.post('/update', (req, res, next) => {
     importer.updateShowtimes();
     res.send('Updating showtimes...');
+})
+
+router.purge('/purge', (req, res, next) => {
+    db.query(`
+			DELETE FROM movie;
+            DELETE FROM credit;
+            DELETE FROM cast_member;
+            DELETE FROM crew_member;
+            DELETE FROM showtime;
+            DELETE FROM reservation;`,
+        (err, rows, fields) => {
+            if (err) throw err;
+            res.send('Purging...');
+        });
 })
 
 
