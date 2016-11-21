@@ -418,5 +418,19 @@ router.post('/update', (req, res, next) => {
     res.send('Updating showtimes...');
 })
 
+router.purge('/purge', (req, res, next) => {
+    db.query(`
+			DELETE FROM movie;
+            DELETE FROM credit;
+            DELETE FROM cast_member;
+            DELETE FROM crew_member;
+            DELETE FROM showtime;
+            DELETE FROM reservation;`,
+        (err, rows, fields) => {
+            if (err) throw err;
+            res.send('Purging...');
+        });
+})
+
 
 module.exports = router;

@@ -83,33 +83,20 @@ var importActors = (movie_id) => {
       if (res.error) x();
       if (!res.body.crew || !res.body.cast) return;
       for (var c of res.body.cast) {
-        if (c.order < 5) continue;
+        if (c.order > 5) continue;
         var cast_member = { 
           'name': c.name,
           'role': c.character,
           'movie_id': movie_id
         };
-        console.log(`
-          INSERT INTO credit(movie_id, name, is_cast_member, is_crew_member)
-          VALUES(${cast_member.movie_id}, '${escapeStringForMySQL(cast_member.name)}', 1, 0);`);
         db.query(`
           INSERT INTO credit(movie_id, name, is_cast_member, is_crew_member)
-          VALUES(?, ?, 1, 0);`,
-          [cast_member.movie_id, cast_member.name],
+          VALUES(?, ?, ?, ?);
+          INSERT INTO cast_member(credit_id, role)
+          VALUES((SELECT LAST_INSERT_ID()), ?);`,
+          [cast_member.movie_id, cast_member.name, true, false, cast_member.role],
           (err, results) => {
             if (err) throw err;
-            console.log('Inserted Id:' + results.insertId)
-            if (results.insertId) {
-              console.log(`
-                INSERT INTO cast_member(credit_id, role)
-                VALUES(${results.insertId}, '${escapeStringForMySQL(cast_member.role)}');`);
-              db.query(`
-                INSERT INTO cast_member(credit_id, role)
-                VALUES(${results.insertId}, '${escapeStringForMySQL(cast_member.role)}');`, 
-                (err, result) => {
-                  if (err) throw err;
-                });
-            }
           });
       }
       for (var c of res.body.crew) {
@@ -121,18 +108,13 @@ var importActors = (movie_id) => {
         };
       db.query(`
           INSERT INTO credit(movie_id, name, is_cast_member, is_crew_member)
-          VALUES(${crew_member.movie_id}, '${escapeStringForMySQL(crew_member.name)}', 0, 1);`, 
-        (err, results) => {
-          if (err) throw err;
-          if (results.insertId) {
-            db.query(`
-              INSERT INTO crew_member(credit_id, job)
-              VALUES (${results.insertId}, '${escapeStringForMySQL(crew_member.job)}');`, 
-              (err, result) => {
-                if (err) throw err;
-            });
-          }
-      });
+          VALUES(?, ?, ?, ?);
+          INSERT INTO crew_member(credit_id, job)
+          VALUES((SELECT LAST_INSERT_ID()), ?);`,
+          [crew_member.movie_id, crew_member.name, false, true, crew_member.job],
+          (err, results) => {
+            if (err) throw err;
+          });
     }
   });
   }

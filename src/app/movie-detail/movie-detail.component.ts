@@ -22,18 +22,18 @@ import { Movie, Showtime, CrewMember, CastMember } from '../models/models';
       </div>
       <div class="movie-info-wrapper">
       
-        <h2 class="header"> {{ movie.title }} </h2>
+        <h1 class="header"> {{ movie.title }} </h1>
         <p> {{ movie.description }} </p>
         <p> Rating: {{ movie.rating }} / 10 </p>
         <p> Runtime: {{ movie.runtime }} min </p>
-        <div class='header'> Crew Members </div>
-        <p>
-          <span *ngFor='let crewMember of crewMembers, let isLast = last'><b>{{crewMember.name}}:</b> {{crewMember.job}} {{isLast ? '' : ','}} </span>
-        </p>
-        <div class='header'> Cast Members</div> 
-        <p>
-          <span *ngFor='let castMember of castMembers, let isLast = last'><b>{{castMember.name}}:</b> {{castMember.role}}{{isLast ? '' : ','}} </span>
-        </p>    
+        <h2 class='header'> Crew Members </h2>
+        <ul>
+          <li *ngFor='let crewMember of crewMembers'><b>{{crewMember.name}}:</b> {{crewMember.job}}</li>
+        </ul>
+        <h2 class='header'> Cast Members</h2> 
+        <ul>
+          <li *ngFor='let castMember of castMembers'><b>{{castMember.name}}:</b> {{castMember.role}}</li>
+        </ul>    
         
         <h2 class="header"> Showtimes </h2>
         <select [(ngModel)]="selectedDay" class='date-selector'>
