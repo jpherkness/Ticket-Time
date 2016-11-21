@@ -28,11 +28,11 @@ import { Movie, Showtime, CrewMember, CastMember } from '../models/models';
         <p> Runtime: {{ movie.runtime }} min </p>
         <div class='header'> Crew Members </div>
         <p>
-          <span *ngFor='let crewMember of crewMembers, let isLast = last'><b>{{crewMember.name}}:</b> {{crewMember.job}} {{isLast ? '' : ','}}</span>
+          <span *ngFor='let crewMember of crewMembers, let isLast = last'><b>{{crewMember.name}}:</b> {{crewMember.job}} {{isLast ? '' : ','}} </span>
         </p>
         <div class='header'> Cast Members</div> 
         <p>
-          <span *ngFor='let castMember of castMembers, let isLast = last'><b>{{castMember.name}}:</b> {{castMember.role}}{{isLast ? '' : ','}}</span>
+          <span *ngFor='let castMember of castMembers, let isLast = last'><b>{{castMember.name}}:</b> {{castMember.role}}{{isLast ? '' : ','}} </span>
         </p>    
         
         <h2 class="header"> Showtimes </h2>

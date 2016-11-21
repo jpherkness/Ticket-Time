@@ -83,21 +83,29 @@ var importActors = (movie_id) => {
       if (res.error) x();
       if (!res.body.crew || !res.body.cast) return;
       for (var c of res.body.cast) {
-        if (c.order < 10) continue;
+        if (c.order < 5) continue;
         var cast_member = { 
-          'name': mysql_real_escape_string(c.name),
-          'role': mysql_real_escape_string(c.character),
+          'name': c.name,
+          'role': c.character,
           'movie_id': movie_id
         };
+        console.log(`
+          INSERT INTO credit(movie_id, name, is_cast_member, is_crew_member)
+          VALUES(${cast_member.movie_id}, '${escapeStringForMySQL(cast_member.name)}', 1, 0);`);
         db.query(`
           INSERT INTO credit(movie_id, name, is_cast_member, is_crew_member)
-          VALUES(${cast_member.movie_id}, '${cast_member.name}', 1, 0);`, 
+          VALUES(?, ?, 1, 0);`,
+          [cast_member.movie_id, cast_member.name],
           (err, results) => {
             if (err) throw err;
+            console.log('Inserted Id:' + results.insertId)
             if (results.insertId) {
+              console.log(`
+                INSERT INTO cast_member(credit_id, role)
+                VALUES(${results.insertId}, '${escapeStringForMySQL(cast_member.role)}');`);
               db.query(`
                 INSERT INTO cast_member(credit_id, role)
-                VALUES(${results.insertId}, '${cast_member.character}');`, 
+                VALUES(${results.insertId}, '${escapeStringForMySQL(cast_member.role)}');`, 
                 (err, result) => {
                   if (err) throw err;
                 });
@@ -107,19 +115,19 @@ var importActors = (movie_id) => {
       for (var c of res.body.crew) {
         if (c.job != 'Director') continue;
         var crew_member = { 
-          'name': mysql_real_escape_string(c.name),
-          'job': mysql_real_escape_string(c.job),
+          'name': c.name,
+          'job': c.job,
           'movie_id': movie_id
         };
       db.query(`
           INSERT INTO credit(movie_id, name, is_cast_member, is_crew_member)
-          VALUES(${crew_member.movie_id}, '${crew_member.name}', 0, 1);`, 
+          VALUES(${crew_member.movie_id}, '${escapeStringForMySQL(crew_member.name)}', 0, 1);`, 
         (err, results) => {
           if (err) throw err;
           if (results.insertId) {
             db.query(`
               INSERT INTO crew_member(credit_id, job)
-              VALUES (${results.insertId}, '${crew_member.job}');`, 
+              VALUES (${results.insertId}, '${escapeStringForMySQL(crew_member.job)}');`, 
               (err, result) => {
                 if (err) throw err;
             });
@@ -171,7 +179,7 @@ var insertShowtimeIntoDatabase = (movie_id, date) => {
     });
 }
 
-function mysql_real_escape_string (str) {
+function escapeStringForMySQL(str) {
     return str.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
         switch (char) {
             case "\0":
@@ -190,8 +198,7 @@ function mysql_real_escape_string (str) {
             case "'":
             case "\\":
             case "%":
-                return "\\"+char; // prepends a backslash to backslash, percent,
-                                  // and double/single quotes
+                return "\\"+char;                   
         }
     });
 }
