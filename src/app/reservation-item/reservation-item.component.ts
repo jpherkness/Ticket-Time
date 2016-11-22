@@ -20,7 +20,11 @@ import { Movie, Showtime, Reservation } from '../models/models'
         'background-position':'center', 
         'background-size':'cover'}" (click)='headerClicked($event)'>
         <div *ngIf='movie' class='title'>{{movie.title}}</div>
-        <span *ngIf='showtime' class='date'>{{showtime.time | date: 'MMM d, y h:mm a' : 'UTC'}}</span>
+        <div *ngIf='showtime' class='date'>
+          <span>{{showtime.time | date: 'mediumDate'}}</span>
+          <span> at <span>
+          <span>{{showtime.time | date: 'shortTime'}}</span>
+        </div>
       </div>
       <div class='reservation-footer'>
         <div class='stepper'>
