@@ -22,7 +22,7 @@ import { Movie, Showtime, Reservation } from '../models/models'
         <div *ngIf='movie' class='title'>{{movie.title}}</div>
         <div *ngIf='showtime' class='date'>
           <span>{{showtime.time | date: 'mediumDate'}}</span>
-          <span> at <span>
+          <span> at </span>
           <span>{{showtime.time | date: 'shortTime'}}</span>
         </div>
       </div>
