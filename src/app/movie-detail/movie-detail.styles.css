@@ -2,7 +2,9 @@
   display: flex;
   flex-flow: row;
   margin: 30px;
+}
 
+p, li {
   line-height: 1.5rem;
 }
 
