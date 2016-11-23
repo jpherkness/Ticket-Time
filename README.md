@@ -1,12 +1,13 @@
 # Ticket Time
 
 [Ticket Time](https://ticket-time.herokuapp.com)
-[Github](https://github.com/jpherkness/Ticket-Time)
 
-> Note: The site may take a few moments to load.
+[Github](https://github.com/jpherkness/Ticket-Time)
 
 1. Create an account with an email and a password. If you don't want to make an account, use the email: `admin@gmail.com` and password: `password`.
 2. Start making movie reservations! It's that simple.
+
+> Note: The site may take a few moments to load. :sweat_smile:
 
 # Running
 
@@ -18,7 +19,7 @@
 
 > Note: If this doesn't work, the database host might me down. :cry:
 
-# Created Using
+# Created Using :heart_eyes:
 
 | Technology | Used for          |
 | ---        | ---               |
@@ -29,7 +30,7 @@
 | Express    | REST Service      |
 | Heroku     | Server Hosting    |
 
-# Project Requirement
+# Project Requirement :clipboard:
 
 This Ticket Reservation site only serves its own movie theater with showroom capacity of 50. However, it reserves 20 tickets for onsite purchase. Thus, at most 30 tickets for a specific show can be reserved online.
 
@@ -50,7 +51,7 @@ A visitor of the site can find what movies will be on in the coming week, their 
 
 # Group Member Contributions
 
- - **Joseph Herkness (Project Manager)** - 40%
+ - **Joseph Herkness (Project Manager) :crown: ** - 40%
   - Back-End Services (REST API, socket.io)
   - Database Design
   - Database Implementation
@@ -58,14 +59,14 @@ A visitor of the site can find what movies will be on in the coming week, their 
   - Project Environment Setup
   - Heroku Setup
   
- - **Joshua Herkness** - 40%
+ - **Joshua Herkness** :sunglasses: - 40%
   - Front-End components
   - Authentication Service
   - Front-End Api Service
   - Website Design
   - Database Design
   
- - **Kenneth Robinson** - 20%
+ - **Kenneth Robinson** :grin: - 20%
   - Database Design
   - Website Design
   - Report and Power point contribution
