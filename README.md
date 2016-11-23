@@ -51,7 +51,7 @@ A visitor of the site can find what movies will be on in the coming week, their 
 
 # Group Member Contributions
 
- - **Joseph Herkness (Project Manager) :crown: ** - 40%
+ - **Joseph Herkness (Project Manager)** :crown: - 40%
   - Back-End Services (REST API, socket.io)
   - Database Design
   - Database Implementation
